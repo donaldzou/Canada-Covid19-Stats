@@ -56,7 +56,12 @@ function color(amount){
     }
     
 }
-
+function thousands_separators(num)
+  {
+    var num_parts = num.toString().split(".");
+    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num_parts.join(".");
+  }
 
 
 function getCases() {
@@ -102,15 +107,19 @@ function getCases() {
                     if (current.date_report == update_time_split) {today_Cases++}
                 }
             }
-            $(".totalCases").text(total_Case);
-            $(".compare_yesterday").text(today_Cases+" New cases")
+            getDead();
+            getRecov();
+            getTested();
+            $(".spinner-loader").fadeOut();
+            $(".totalCases").text(thousands_separators(total_Case));
+            $(".compare_yesterday").text(thousands_separators(today_Cases)+" New cases")
             $(".today_date").text("Update Time: "+update_time)
             for (var i = 0; i < code.length; i++){
                 current_code = code[i]
                 if (current_code != "RP"){
                     var amount = caseDict['count'][full_name[i]]
                     var color_prov = color(amount) 
-                    simplemaps_canadamap_mapdata['state_specific'][current_code]['description'] = amount +" cases";
+                    simplemaps_canadamap_mapdata['state_specific'][current_code]['description'] = thousands_separators(amount) +" cases";
                     simplemaps_canadamap_mapdata['state_specific'][current_code]['color'] = color_prov;
                     simplemaps_canadamap_mapdata['state_specific'][current_code]['hover_color'] = color_prov;
                     var width = $(window).width();
@@ -158,16 +167,11 @@ function getCases() {
                             }
                             else{data_temp['data'].push(0)}
                         }
-
                     }
                     province_dataset.push(data_temp)
                 }
                 
             }
-
-            
-
-
             if (width <= 768){
                 $(".myChartDiv").append('<canvas id="myChart" width="500" height="600"></canvas>')
 
@@ -186,9 +190,6 @@ function getCases() {
 
             //Initialize Map
             $("head").append('<script src="canadamap.js"></script>')
-            
-            
-
         }
     }
     )
@@ -216,8 +217,8 @@ function getDead() {
                     }
                 }
             }
-            $(".totalDeath").text(total_Death);
-            $(".compare_yesterday_death").text(today_Death+" New deaths")
+            $(".totalDeath").text(thousands_separators(total_Death));
+            $(".compare_yesterday_death").text(thousands_separators(today_Death)+" New deaths")
         }
     }
     )
@@ -260,8 +261,8 @@ function getRecov() {
                     }
                     
                 }
-                $('.totalRecov').text(recov_today)
-                $(".compare_yesterday_recov").text(recov_today-recov_yesterday +" New Recovered")
+                $('.totalRecov').text(thousands_separators(recov_today))
+                $(".compare_yesterday_recov").text(thousands_separators(recov_today-recov_yesterday) +" New Recovered")
             }
         }
     }
@@ -290,23 +291,22 @@ function getTested() {
                     }
                 }
                 test_today = 0
-                today_key = Object.keys(testDict)[0]
+                test_today_key = Object.keys(testDict)[0]
                 test_yesterday = 0
-                yesterday_key = Object.keys(testDict)[1]
-                for (var i = 0; i < testDict[today_key]["cases"].length;i++){
-                    if (testDict[today_key]["cases"][i]['cumulative_testing'] != "NA"){
-                        test_today += parseInt(recovDict[today_key]["cases"][i]['cumulative_testing'])
+                test_yesterday_key = Object.keys(testDict)[1]
+                for (var i = 0; i < testDict[test_today_key]["cases"].length;i++){
+                    var current_tested = parseInt(testDict[test_today_key]["cases"][i][['cumulative_testing']])
+                    if (current_tested != "NA"){
+                        test_today = test_today + current_tested
                     }
-                    
                 }
-                for (var i = 0; i < testDict[yesterday_key]["cases"].length;i++){
-                    if(testDict[yesterday_key]["cases"][i]['cumulative_testing'] != 'NA'){
-                        test_yesterday += parseInt(testDict[yesterday_key]["cases"][i]['cumulative_testing'])
+                for (var i = 0; i < testDict[test_yesterday_key]["cases"].length;i++){
+                    if(testDict[test_yesterday_key]["cases"][i]['cumulative_testing'] != 'NA'){
+                        test_yesterday += parseInt(testDict[test_yesterday_key]["cases"][i]['cumulative_testing'])
                     }
-                    
                 }
-                $('.totalTest').text(test_today)
-                $(".compare_yesterday_test").text(test_today-test_yesterday +" New Recovered")
+                $('.totalTest').text(thousands_separators(test_today))
+                $(".compare_yesterday_test").text(thousands_separators(test_today-test_yesterday) +" New Recovered")
             }
         }
     }
@@ -320,13 +320,7 @@ fetch(url)
         update_time_split = update_time.split("-")
         update_time_split[2] = update_time_split[2].split(" ")
         update_time_split = update_time_split[2][0] + "-" + update_time_split[1] + "-" + update_time_split[0]
-        
-        getDead();
-        getRecov();
-        getTested();
         getCases();
         
-        
-        $(".main").fadeIn();
     });
   });

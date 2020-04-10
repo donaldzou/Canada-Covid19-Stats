@@ -30,9 +30,11 @@
                 <a class="nav-item nav-link" href="#">Pricing</a>
                 <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </div>
-            <span class="navbar-text">
-                Navbar text with an inline element
-            </span>
+            <div class="spinner-grow spinner-grow-sm text-danger" role="status">
+                <span class="sr-only"></span>
+            </div>
+            <span class="navbar-text today_date"></span>
+            
         </div>
     </nav>
 
@@ -40,68 +42,88 @@
         <div class="row">
             <div class="col-sm">
                 <div class="card text-white bg-info mb-3 ">
-                    <div class="card-header">
-                        Total Cases
-                    </div>
+                    <div class="card-header">Total Cases</div>
                     <div class="card-body">
                         <h1 class="card-title totalCases"></h1>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                         <hr>
                         <h5 class="card-text compare_yesterday"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm">
                 <div class="card text-white bg-danger mb-3">
-                    <div class="card-header">
-                        Total Death
-                    </div>
+                    <div class="card-header">Total Death</div>
                     <div class="card-body">
                         <h1 class="card-title totalDeath"></h1>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                         <hr>
                         <h5 class="card-text compare_yesterday_death"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm">
                 <div class="card text-white bg-success mb-3">
-                    <div class="card-header">
-                        Total Recovered
-                    </div>
+                    <div class="card-header">Total Recovered</div>
                     <div class="card-body">
                         <h1 class="card-title totalRecov"></h1>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                         <hr>
                         <h5 class="card-text compare_yesterday_recov"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">
-                        Total Tested
-                    </div>
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-header">Total Tested</div>
                     <div class="card-body">
                         <h1 class="card-title totalTest"></h1>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                         <hr>
                         <h5 class="card-text compare_yesterday_test"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <p class="today_date"></p>
         <div class="card map_container">
-            <div class="card-header">
-                Map | Reported Case
-            </div>
+            <div class="card-header">Map | Reported Case</div>
             <div class="card-body map_body">
+                <div class="text-center spinner-loader">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
                 <div id="map"></div>
             </div>
         </div>
         <div class="card">
-            <div class="card-header">
-                Chart | Reported Case
-            </div>
+            <div class="card-header">Chart | Reported Case</div>
             <div class="card-body myChartDiv">
-                <!-- <canvas id="myChart" width="500" height="400"></canvas> -->
+                <div class="text-center spinner-loader">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
             </div>
         </div>
 
