@@ -15,6 +15,9 @@ var total_Death = 0;
 var today_Cases = 0;
 var today_Death = 0;
 
+var recov_today = 0;
+var recov_yesterday = 0;
+
 var today_date = new Date();
 var twoDigitMonth_today = ("0" + (today_date.getMonth() + 1)).slice(-2)
 var twoDigitDay_today = ("0" + today_date.getDate()).slice(-2)
@@ -186,15 +189,10 @@ function getCases() {
                 
             }
             if (width <= 768){
-                $(".myChartDiv").append('<canvas id="myChart" width="500" height="600"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
+                $(".myChartDiv").append('<canvas id="myChart" width="500" height="800"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
             else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
-             $('#prov_data_table').DataTable({
-                'paging':false,
-                'info':false,
-                'searching':false
-            });
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
