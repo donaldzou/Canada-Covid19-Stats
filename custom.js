@@ -18,6 +18,9 @@ var today_Death = 0;
 var recov_today = 0;
 var recov_yesterday = 0;
 
+var test_today = 0;
+var test_yesterday = 0;
+
 var today_date = new Date();
 var twoDigitMonth_today = ("0" + (today_date.getMonth() + 1)).slice(-2)
 var twoDigitDay_today = ("0" + today_date.getDate()).slice(-2)
@@ -28,6 +31,8 @@ var url = 'https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/upda
 var update_time;
 var update_time_split;
 
+
+var temp_list = [];
 
 province_dataset = [
     {
@@ -123,9 +128,8 @@ function getCases() {
                 }
 
             }
-            getDead();
+            
             getRecov();
-            getTested();
             $(".spinner-loader").fadeOut();
             $(".totalCases").text(thousands_separators(total_Case));
             $(".compare_yesterday").text(thousands_separators(today_Cases)+" New cases")
@@ -308,7 +312,7 @@ function getDead() {
                     tested_new = thousands_separators(test_today - test_yesterday)
                 }
                 else{
-                    var temp_list = Object.keys(death_report_dates)
+                    temp_list = Object.keys(death_report_dates)
                     var data_list = []
                     for (var a in temp_list){
                         if (death_report_dates[temp_list[a]]['province'][current_province_name] != undefined){
@@ -403,6 +407,7 @@ function getRecov() {
                 }
                 $('.totalRecov').text(thousands_separators(recov_today))
                 $(".compare_yesterday_recov").text(thousands_separators(recov_today-recov_yesterday) +" New Recovered")
+                getTested();
             }
         }
     }
@@ -447,6 +452,7 @@ function getTested() {
                 }
                 $('.totalTest').text(thousands_separators(test_today))
                 $(".compare_yesterday_test").text(thousands_separators(test_today-test_yesterday) +" New Tested")
+                getDead();
             }
         }
     }
