@@ -3,6 +3,7 @@
 <head>
     <!--Required-->
     <meta charset="utf-8">
+    <title>Canada COVID-19 Stats</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -14,21 +15,30 @@
     <script src="mapdata.js"></script>
     <!-- <script src="canadamap.js"></script> -->
 
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
 </head>
 
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Coronavirus in Canada</a>
+        <a class="navbar-brand" href="#">Canada COVID-19 Stats</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Features</a>
-                <a class="nav-item nav-link" href="#">Pricing</a>
-                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                <a class="nav-item nav-link active" href="#">Overview<span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Cases</a>
             </div>
             <div class="spinner-grow spinner-grow-sm text-danger" role="status">
                 <span class="sr-only"></span>
@@ -105,7 +115,7 @@
                 </div>
             </div>
         </div>
-        <div class="card map_container">
+        <div class="card text-white bg-dark mb-3 map_container main_card">
             <div class="card-header">Map | Reported Case</div>
             <div class="card-body map_body">
                 <div class="text-center spinner-loader">
@@ -116,7 +126,7 @@
                 <div id="map"></div>
             </div>
         </div>
-        <div class="card">
+        <div class="card text-white bg-dark mb-3 main_card">
             <div class="card-header">Chart | Reported Case</div>
             <div class="card-body myChartDiv">
                 <div class="text-center spinner-loader">
@@ -124,6 +134,42 @@
                       <span class="sr-only">Loading...</span>
                     </div>
                   </div>
+                  
+            </div>
+        </div>
+        <div class="card text-white bg-dark mb-3 main_card">
+            <div class="card-header">Table | Reported Case</div>
+            <div class="card-body">
+                  <div class="table-responsive">
+                  <table class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Province</th>
+                        <th scope="col">Cases</th>
+                        <th scope="col">New Cases</th>
+                        <th scope="col">Deaths</th>
+                        <th scope="col">New Deaths</th>
+                        <th scope="col">Recovered</th>
+                        <th scope="col">New Recovered</th>
+                        <th scope="col">Tested</th>
+                        <th scope="col">New Tested</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table_body">
+                      
+                    </tbody>
+                    
+                  </table>
+                  <div class="text-center spinner-loader">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                </div>
+
+
+                
             </div>
         </div>
 

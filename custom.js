@@ -3,11 +3,13 @@ var caseDict = {"cases":[],"count":{}}
 var report_dates = {}
 var report_country_amount = []
 var deathDict = {"cases":[]}
+var death_report_dates = {}
 var recovDict = {}
 var testDict = {}
 var province_list;
-var code = ["ON","BC","QC","AB","SK","MB","NB","PE","NL","RP","NS","NT","YT"]
+var code = ["ON","BC","QC","AB","SK","MB","NB","PE","NL","RP","NS","NT","YT","NU"]
 var full_name = []
+var province_data_list = []
 var total_Case = 0;
 var total_Death = 0;
 
@@ -79,7 +81,6 @@ function getCases() {
                     current = schedule_array[i];
                     caseDict["cases"].push(current)
                     total_Case++;
-
                     if (report_dates[current.date_report] == undefined){
                         report_dates[current.date_report] = {"count":0,"province":{}}
                         report_dates[current.date_report]["count"]++;
@@ -106,6 +107,11 @@ function getCases() {
                     }
                     if (current.date_report == update_time_split) {today_Cases++}
                 }
+                if (full_name.includes("Nunavut") == false){
+                    caseDict['count']['Nunavut'] = 0
+                    full_name.push("Nunavut")
+                }
+
             }
             getDead();
             getRecov();
@@ -173,18 +179,53 @@ function getCases() {
                 
             }
             if (width <= 768){
-                $(".myChartDiv").append('<canvas id="myChart" width="500" height="600"></canvas>')
+                $(".myChartDiv").append('<canvas id="myChart" width="500" height="600"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
-            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas>')}
+            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>')}
             var ctx = document.getElementById("myChart");
-            var myChart = new Chart(ctx, {
+            Chart.defaults.global.defaultFontColor = 'white';
+            let myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: Object.keys(report_dates),
                     datasets: province_dataset
                 },
-                options: {scales: {yAxes: [{ticks: {beginAtZero:true}}]}}
+                options: {
+                    scales: {
+                        yAxes: [{
+                            gridLines:{
+                                color:'rgba(255,255,255,0.2)'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                fontColor: 'white'
+                            },
+                            scaleLabel:{
+                                display: true,
+                                labelString:"Cases"
+                            }
+                        }],
+                        xAxes: [{   
+                            ticks: {
+                                fontColor: "white"
+                            },
+                            gridLines:{
+                                color:'rgba(255,255,255,0.2)'
+                            },
+                            scaleLabel:{
+                                display:true,
+                                labelString:"Dates"
+                            }
+                        }]
+                    },
+                    legend: {
+                        labels: {
+                            // This more specific font property overrides the global property
+                            fontColor: 'white'
+                        }
+                    },  
+                }
             });
             //Chart end
 
@@ -211,14 +252,92 @@ function getDead() {
                     deathDict["cases"].push(current)
                     total_Death++;
                     date_death = current.date_death_report
-                    
                     if (date_death == update_time_split) {
                         today_Death++;
                     }
+
+                    if (death_report_dates[date_death] == undefined){
+                        death_report_dates[date_death] = {'province':{}}
+                    }
+                    if (death_report_dates[date_death]['province'][current.province] == undefined){
+                        death_report_dates[date_death]['province'][current.province] = 1
+                    }
+                    else{
+                        death_report_dates[date_death]['province'][current.province]++
+                    }
+
+
                 }
             }
             $(".totalDeath").text(thousands_separators(total_Death));
             $(".compare_yesterday_death").text(thousands_separators(today_Death)+" New deaths")
+
+            //Handle Table
+            for (var k in province_dataset){
+                var num = parseInt(k)+1
+                var current_province_name = province_dataset[k]['label']
+                var case_length = province_dataset[k]['data'].length
+                var case_today = thousands_separators(province_dataset[k]['data'][case_length-1])
+                var case_new = thousands_separators(province_dataset[k]['data'][case_length-2])
+                
+                var death_today = 0
+                var death_new = 0
+
+                var recov_today_province = 0
+                var recov_new_province=0
+
+                var tested_today = 0
+                var tested_new = 0
+
+                if (current_province_name == 'Canada'){
+                    death_today = thousands_separators(total_Death)
+                    death_new = thousands_separators(today_Death)
+                    recov_today_province = thousands_separators(recov_today)
+                    recov_new_province = thousands_separators(recov_today - recov_yesterday)
+                    tested_today = thousands_separators(test_today)
+                    tested_new = thousands_separators(test_today - test_yesterday)
+                }
+                else{
+                    var temp_list = Object.keys(death_report_dates)
+                    var data_list = []
+                    for (var a in temp_list){
+                        if (death_report_dates[temp_list[a]]['province'][current_province_name] != undefined){
+                            if (a > 0){
+                                data_list.push(data_list[a-1] + parseInt(death_report_dates[temp_list[a]]['province'][current_province_name]))
+                            }
+                            else{
+                                data_list.push(parseInt(death_report_dates[temp_list[a]]['province'][current_province_name]))
+                            }
+                        }
+                        else{
+                            if (a > 0){
+                                data_list.push(data_list[a-1])
+                            }
+                            else{
+                                data_list.push(0)
+                            }
+                        }
+                    }
+
+                    temp_list = Object.keys(recovDict);
+                    for(var a in recovDict[temp_list[0]]['cases']){
+                        if (current_province_name == recovDict[temp_list[0]]['cases'][a]['province']){
+                            recov_today_province = thousands_separators(parseInt(recovDict[temp_list[0]]['cases'][a]['cumulative_recovered']))
+                        }
+                    }
+                    for(var a in recovDict[temp_list[1]]['cases']){
+                        if (current_province_name == recovDict[temp_list[0]]['cases'][a]['province']){
+                            recov_new_province = thousands_separators(parseInt(recovDict[temp_list[0]]['cases'][a]['cumulative_recovered']))
+                        }
+                    }
+
+                    death_today = thousands_separators(data_list[data_list.length - 1])
+                    death_new = thousands_separators(death_today - data_list[data_list.length - 2])
+
+                }
+                var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+case_today+'</td><td class="table_province_new_cases">'+case_new+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
+                $(".table_body").append(temp_html)
+            }
         }
     }
     )
@@ -306,9 +425,13 @@ function getTested() {
                     }
                 }
                 $('.totalTest').text(thousands_separators(test_today))
-                $(".compare_yesterday_test").text(thousands_separators(test_today-test_yesterday) +" New Recovered")
+                $(".compare_yesterday_test").text(thousands_separators(test_today-test_yesterday) +" New Tested")
             }
         }
+
+
+
+        
     }
     )
 };
