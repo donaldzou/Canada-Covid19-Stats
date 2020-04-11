@@ -41,7 +41,6 @@ function main(){
 }
 
 function cases(){
-    $(".nav-link"
     $(".tab").fadeOut()
     $(".cases").fadeIn()
 }
