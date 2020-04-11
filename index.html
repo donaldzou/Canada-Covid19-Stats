@@ -13,18 +13,6 @@
     <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css'>
     <link rel="stylesheet" href="style.css">
     <script src="mapdata.js"></script>
-    <!-- <script src="canadamap.js"></script> -->
-
-
-
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
-    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
 
 </head>
 
@@ -37,8 +25,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="#">Overview<span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Cases</a>
+                <a class="nav-item nav-link active" href="/">Overview<span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link cases_link" href="#cases" onclick="cases()">Cases</a>
             </div>
             <div class="spinner-grow spinner-grow-sm text-danger" role="status">
                 <span class="sr-only"></span>
@@ -48,7 +36,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid main">
+    <div class="tab container-fluid main tab">
         <div class="row">
             <div class="col-sm">
                 <div class="card text-white bg-info mb-3 ">
@@ -174,6 +162,16 @@
         </div>
 
            
+    </div>
+
+    <div class='tab container-fluid cases'>
+        <div class="jumbotron">
+            <h1 class="display-4">Hello, world!</h1>
+            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+            <hr class="my-4">
+            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+          </div>
     </div>
         
 

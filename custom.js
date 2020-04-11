@@ -1,4 +1,3 @@
-
 var caseDict = {"cases":[],"count":{}}
 var report_dates = {}
 var report_country_amount = []
@@ -36,6 +35,16 @@ province_dataset = [
     }
 ]
 
+function main(){
+    $(".tab").hide();
+    $(".main").fadeIn();
+}
+
+function cases(){
+    $(".nav-link"
+    $(".tab").fadeOut()
+    $(".cases").fadeIn()
+}
 
 function color(amount){
     if (amount < 100){
@@ -442,10 +451,6 @@ function getTested() {
                 $(".compare_yesterday_test").text(thousands_separators(test_today-test_yesterday) +" New Tested")
             }
         }
-
-
-
-        
     }
     )
 };
@@ -461,3 +466,10 @@ fetch(url)
         
     });
   });
+
+
+
+$(document).ready(function(){
+    $(".tab").hide()
+    main();
+})
