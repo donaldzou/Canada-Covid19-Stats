@@ -76,7 +76,6 @@ function getCases() {
             schedule_array = $.csv.toObjects(casedata.responseText)
             status = 'true';
             if (status == "true"){
-                console.log(schedule_array.length)
                 for(var i=0;i<schedule_array.length;i++){
                     current = schedule_array[i];
                     caseDict["cases"].push(current)
@@ -246,7 +245,6 @@ function getDead() {
             deathArray = $.csv.toObjects(deathdata.responseText)
             status = 'true';
             if (status == "true"){
-                console.log(deathArray.length)
                 for(var i=0;i<deathArray.length;i++){
                     current = deathArray[i];
                     deathDict["cases"].push(current)
@@ -322,12 +320,23 @@ function getDead() {
                     temp_list = Object.keys(recovDict);
                     for(var a in recovDict[temp_list[0]]['cases']){
                         if (current_province_name == recovDict[temp_list[0]]['cases'][a]['province']){
-                            recov_today_province = thousands_separators(parseInt(recovDict[temp_list[0]]['cases'][a]['cumulative_recovered']))
+                            recov_today_province = parseInt(recovDict[temp_list[0]]['cases'][a]['cumulative_recovered'])
                         }
                     }
                     for(var a in recovDict[temp_list[1]]['cases']){
                         if (current_province_name == recovDict[temp_list[0]]['cases'][a]['province']){
-                            recov_new_province = thousands_separators(parseInt(recovDict[temp_list[0]]['cases'][a]['cumulative_recovered']))
+                            recov_new_province = recov_today_province - parseInt(recovDict[temp_list[1]]['cases'][a]['cumulative_recovered'])
+                        }
+                    }
+                    temp_list = Object.keys(testDict)
+                    for(var a in testDict[temp_list[0]]['cases']){
+                        if (current_province_name == testDict[temp_list[0]]['cases'][a]['province']){
+                            tested_today = parseInt(testDict[temp_list[0]]['cases'][a]['cumulative_testing'])
+                        }
+                    }
+                    for(var a in testDict[temp_list[1]]['cases']){
+                        if (current_province_name == testDict[temp_list[1]]['cases'][a]['province']){
+                            tested_new = thousands_separators(tested_today - parseInt(testDict[temp_list[1]]['cases'][a]['cumulative_testing']))
                         }
                     }
 
@@ -338,6 +347,11 @@ function getDead() {
                 var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+case_today+'</td><td class="table_province_new_cases">'+case_new+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
                 $(".table_body").append(temp_html)
             }
+            $('#prov_data_table').DataTable({
+                'paging':false,
+                'info':false,
+                'searching':false
+            });
         }
     }
     )
