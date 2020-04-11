@@ -189,7 +189,13 @@ function getCases() {
                 $(".myChartDiv").append('<canvas id="myChart" width="500" height="600"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
-            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>')}
+            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
+             $('#prov_data_table').DataTable({
+                'paging':false,
+                'info':false,
+                'searching':false
+            });
+        }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
             let myChart = new Chart(ctx, {
@@ -355,11 +361,6 @@ function getDead() {
                 var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+case_today+'</td><td class="table_province_new_cases">'+case_new+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
                 $(".table_body").append(temp_html)
             }
-            $('#prov_data_table').DataTable({
-                'paging':false,
-                'info':false,
-                'searching':false
-            });
         }
     }
     )
