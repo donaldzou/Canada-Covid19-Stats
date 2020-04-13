@@ -31,6 +31,7 @@ var url = 'https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/upda
 var update_time;
 var update_time_split;
 
+var age = {}
 
 var temp_list = [];
 
@@ -51,6 +52,63 @@ function main(){
 function cases(){
     $(".tab").fadeOut()
     $(".cases").fadeIn()
+    for (var a in province_list){
+        $(".province_tab").append('<a class="nav-link" id="v-pills-'+province_list[a]+'-tab" data-toggle="pill" href="#v-pills-'+province_list[a]+'" role="tab" aria-controls="v-pills-home" aria-selected="true">'+province_list[a]+'</a>')
+    }
+
+
+    var ctx = document.getElementById("prov_chart");
+    var chart_label = Object.keys(age)
+    chart_label.splice(chart_label.indexOf("Not Reported"),1)
+    var chart_data = []
+    for (var n in chart_label){
+        chart_data.push(age[chart_label[n]])
+    }
+    var myChart1 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: chart_label,
+        datasets: [{
+            label:"# of cases",
+            data: chart_data,
+            borderWidth: 1,
+            backgroundColor: '#17a2b8',
+        }]
+    },
+    options: {
+        // responsive: true,
+        scales: {
+        xAxes: [{
+            gridLines:{
+                color:'rgba(255,255,255,0.2)'
+            },
+            ticks: {
+            maxRotation: 90,
+            minRotation: 80
+            },
+            scaleLabel:{
+                display:true,
+                labelString:"Ages"
+            }
+        }],
+        yAxes: [{
+            gridLines:{
+                color:'rgba(255,255,255,0.2)'
+            },
+            ticks: {
+            beginAtZero: true
+            },
+            scaleLabel:{
+                display:true,
+                labelString:"# of cases"
+            }
+        }]
+        }
+    }
+    });
+
+    
+
 }
 
 function color(amount){
@@ -92,26 +150,37 @@ function getCases() {
             schedule_array = $.csv.toObjects(casedata.responseText)
             status = 'true';
             if (status == "true"){
-                for(var i=0;i<schedule_array.length;i++){
+                for(var i in schedule_array){
                     current = schedule_array[i];
+                    
                     caseDict["cases"].push(current)
                     total_Case++;
+                    
+
                     if (report_dates[current.date_report] == undefined){
+                        if (Object.keys(report_dates).length > 1){
+                            var last_dates = Object.keys(report_dates)[Object.keys(report_dates).length - 1].split('-')
+                            last_dates = new Date(last_dates[2]+'-'+last_dates[1]+'-'+last_dates[0])
+                            var current_date = current.date_report.split('-')
+                            current_date = new Date(current_date[2]+'-'+current_date[1]+'-'+current_date[0])
+                        }
+                        
                         report_dates[current.date_report] = {"count":0,"province":{}}
                         report_dates[current.date_report]["count"]++;
+
+                        
                     }
                     else{
                         report_dates[current.date_report]["count"]++;
                     }
                     if (report_dates[current.date_report]["province"][current.province] == undefined){
+                       
                         report_dates[current.date_report]["province"][current.province] = 0;
                         report_dates[current.date_report]["province"][current.province]++;
                     }
                     else{
                         report_dates[current.date_report]["province"][current.province]++;
                     }
-
-
                     if (caseDict["count"][current.province] == undefined){
                         caseDict["count"][current.province] = 0
                         full_name.push(current.province)
@@ -121,6 +190,15 @@ function getCases() {
                         caseDict["count"][current.province]++
                     }
                     if (current.date_report == update_time_split) {today_Cases++}
+
+                    if (age[current.age] == undefined){
+                        age[current.age] = 1;
+                    }
+                    else{
+                        age[current.age]++;
+                    }
+
+
                 }
                 if (full_name.includes("Nunavut") == false){
                     caseDict['count']['Nunavut'] = 0
@@ -200,10 +278,16 @@ function getCases() {
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
+            var label = Object.keys(report_dates)
+            for (var i in label){
+                var t = label[i].split('-')
+                label[i] = t[2]+'-'+t[1]+'-'+t[0]
+            }
+            label.sort()
             let myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: Object.keys(report_dates),
+                    labels: label,
                     datasets: province_dataset
                 },
                 options: {

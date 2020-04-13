@@ -22,6 +22,9 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     margin-bottom: 20px;
 }
 
+.cases{
+    display: none;
+}
 
 
 .main_card{
@@ -34,3 +37,11 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     width:0.75rem;
     height:0.75rem;
 }
+.choose_province{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.dropdown-menu {
+    margin-top:10px;
+  }
