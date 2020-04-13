@@ -375,8 +375,8 @@ function getDead() {
                 var num = parseInt(k)+1
                 var current_province_name = province_dataset[k]['label']
                 var case_length = province_dataset[k]['data'].length
-                var case_today = thousands_separators(province_dataset[k]['data'][case_length-1])
-                var case_new = thousands_separators(province_dataset[k]['data'][case_length-2])
+                var case_today = province_dataset[k]['data'][case_length-1]
+                var case_new = case_today - province_dataset[k]['data'][case_length-2]
                 
                 var death_today = 0
                 var death_new = 0
@@ -444,7 +444,7 @@ function getDead() {
                     death_new = thousands_separators(death_today - data_list[data_list.length - 2])
 
                 }
-                var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+case_today+'</td><td class="table_province_new_cases">'+case_new+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
+                var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+thousands_separators(case_today)+'</td><td class="table_province_new_cases">'+thousands_separators(case_new)+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
                 $(".table_body").append(temp_html)
             }
         }
