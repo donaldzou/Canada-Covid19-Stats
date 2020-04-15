@@ -13,6 +13,10 @@
         crossorigin="" />
     <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css'>
     <link rel="stylesheet" href="style.css">
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
     <script src="mapdata.js"></script>
 
 </head>
@@ -160,45 +164,62 @@
     </div>
 
     <div class='tab container-fluid cases'>
-        <button type="button" class="btn btn-info dropdown-toggle choose_province" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">All Provinces</button>
-        <div class="dropdown-menu case_province"></div>
-        <div class="card text-white bg-info mb-3">
-            <div class="card-header">Total Cases</div>
-            <div class="card-body">
-                <h1 class="card-title totalCases"></h1>
-                <hr>
-                <h5 class="card-text compare_yesterday"></h5>
-            </div>
-        </div>
-    
-        
         <div class="row">
-            <div class="col-3 ">
-              <div class="nav flex-column nav-pills province_tab" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-all" role="tab" aria-controls="v-pills-home" aria-selected="true">All</a>
-              </div>
-            </div>
-            <div class="col-9 ">
-              <div class="tab-content province_panel" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-all" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header">
-                            Featured
-                        </div>
-                        <div class="card-body">
-                            <canvas id="prov_chart" width="500" height="100"></canvas>
-                        </div>
+            <div class="col-sm-4">
+                <div class="input-group dropdown-cases">
+                    <select class="custom-select" id="province-select" aria-label="Example select with button addon">
+                      <option value="Canada" selected>Canada</option>
+                    </select>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" id="get_province" type="button">Search</button>
+                    </div>
+                  </div>
+                <div class="card text-white bg-info mb-3 province_total_case">
+                    <div class="card-body">
+                        <h5 class="card-title totalCases"></h5>
+                        <hr>
+                        <h5 class="card-text compare_yesterday"></h5>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
-                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
-                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
-              </div>
             </div>
+            <div class="col-sm-8">
+                <div class="card text-white bg-dark mb-3 map">
+                    <div class="card-header">
+                        Map | Canada Reported Cases
+                    </div>
+                    <div class="card-body">
+                        <div id="mapid"></div>  
+                        <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div> 
+                <div class="card text-white bg-dark mb-3 age-table">
+                    <div class="card-header">
+                        Table | Canada Reported Cases Age Cumulative
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <canvas id="prov_chart" width="500" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
           </div>
-    
-    
+
+
+
+       
+        
+          
     </div>
 
 
@@ -215,6 +236,7 @@
 <script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
 <script src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js'></script>
 <script src="custom.js"></script>
+<script src='cases.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 
 

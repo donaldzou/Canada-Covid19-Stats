@@ -42,6 +42,14 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     margin-bottom: 10px;
 }
 
-.dropdown-menu {
+.dropdown-cases {
     margin-top:10px;
+    margin-bottom:10px;
   }
+
+
+#mapid { height: 600px; }
+
+#province_title{
+    color:white
+}

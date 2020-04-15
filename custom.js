@@ -11,7 +11,7 @@ var full_name = []
 var province_data_list = []
 var total_Case = 0;
 var total_Death = 0;
-
+var custom_data = {}
 var today_Cases = 0;
 var today_Death = 0;
 
@@ -20,7 +20,7 @@ var recov_yesterday = 0;
 
 var test_today = 0;
 var test_yesterday = 0;
-
+var temp_prov_list;
 var today_date = new Date();
 var twoDigitMonth_today = ("0" + (today_date.getMonth() + 1)).slice(-2)
 var twoDigitDay_today = ("0" + today_date.getDate()).slice(-2)
@@ -35,6 +35,8 @@ var age = {}
 
 var temp_list = [];
 
+var mymap;
+
 province_dataset = [
     {
         label: 'Canada',
@@ -47,68 +49,6 @@ province_dataset = [
 function main(){
     $(".tab").hide();
     $(".main").fadeIn();
-}
-
-function cases(){
-    $(".tab").fadeOut()
-    $(".cases").fadeIn()
-    for (var a in province_list){
-        $(".province_tab").append('<a class="nav-link" id="v-pills-'+province_list[a]+'-tab" data-toggle="pill" href="#v-pills-'+province_list[a]+'" role="tab" aria-controls="v-pills-home" aria-selected="true">'+province_list[a]+'</a>')
-    }
-
-
-    var ctx = document.getElementById("prov_chart");
-    var chart_label = Object.keys(age)
-    chart_label.splice(chart_label.indexOf("Not Reported"),1)
-    var chart_data = []
-    for (var n in chart_label){
-        chart_data.push(age[chart_label[n]])
-    }
-    var myChart1 = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: chart_label,
-        datasets: [{
-            label:"# of cases",
-            data: chart_data,
-            borderWidth: 1,
-            backgroundColor: '#17a2b8',
-        }]
-    },
-    options: {
-        // responsive: true,
-        scales: {
-        xAxes: [{
-            gridLines:{
-                color:'rgba(255,255,255,0.2)'
-            },
-            ticks: {
-            maxRotation: 90,
-            minRotation: 80
-            },
-            scaleLabel:{
-                display:true,
-                labelString:"Ages"
-            }
-        }],
-        yAxes: [{
-            gridLines:{
-                color:'rgba(255,255,255,0.2)'
-            },
-            ticks: {
-            beginAtZero: true
-            },
-            scaleLabel:{
-                display:true,
-                labelString:"# of cases"
-            }
-        }]
-        }
-    }
-    });
-
-    
-
 }
 
 function color(amount){
@@ -182,12 +122,14 @@ function getCases() {
                         report_dates[current.date_report]["province"][current.province]++;
                     }
                     if (caseDict["count"][current.province] == undefined){
-                        caseDict["count"][current.province] = 0
+                        caseDict["count"][current.province] = {'count':0,'cases':[]}
+                        caseDict["count"][current.province]['cases'].push(current)
                         full_name.push(current.province)
-                        caseDict["count"][current.province]++;
+                        caseDict["count"][current.province]['count']++;
                     }
                     else{
-                        caseDict["count"][current.province]++
+                        caseDict["count"][current.province]['count']++
+                        caseDict["count"][current.province]['cases'].push(current)
                     }
                     if (current.date_report == update_time_split) {today_Cases++}
 
@@ -201,7 +143,7 @@ function getCases() {
 
                 }
                 if (full_name.includes("Nunavut") == false){
-                    caseDict['count']['Nunavut'] = 0
+                    caseDict['count']['Nunavut'] = {'count':0,'cases':[]}
                     full_name.push("Nunavut")
                 }
 
@@ -215,7 +157,7 @@ function getCases() {
             for (var i = 0; i < code.length; i++){
                 current_code = code[i]
                 if (current_code != "RP"){
-                    var amount = caseDict['count'][full_name[i]]
+                    var amount = caseDict['count'][full_name[i]]['count']
                     var color_prov = color(amount) 
                     simplemaps_canadamap_mapdata['state_specific'][current_code]['description'] = thousands_separators(amount) +" cases";
                     simplemaps_canadamap_mapdata['state_specific'][current_code]['color'] = color_prov;
@@ -239,6 +181,7 @@ function getCases() {
                 
             }
             province_list = Object.keys(caseDict['count'])
+            province_list.splice(province_list.indexOf('Repatriated'),1)
             color_list = ["#C2185B","#E040FB",'#1976D2','#00BCD4','#4CAF50','#FF5722','#CDDC39','#616161','#607D8B','#FFC107','#FF9800','#303F9F','#E040FB','#5D4037']
             for (var n in province_list){
                 var current_province = province_list[n]
@@ -445,6 +388,8 @@ function getDead() {
 
                 }
                 var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+thousands_separators(case_today)+'</td><td class="table_province_new_cases">'+thousands_separators(case_new)+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
+                custom_data[current_province_name] = {'today':case_today,'new':case_new}
+                
                 $(".table_body").append(temp_html)
             }
         }
