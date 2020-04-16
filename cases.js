@@ -10,17 +10,12 @@ var group1 = L.featureGroup();
 function cases() {
     $(".nav-link").removeClass("active");
     $(".cases-link").addClass("active");
-
-
-
     $(".tab").fadeOut()
     $(".cases").fadeIn()
     for (var a in province_list) {
         $("#province-select").append('<option value="' + province_list[a] + '">' + province_list[a] + '</option>')
     }
-
-    $("#mapid").hide()
-    $("#prov_chart").hide()
+    $(".cases_mod").hide()
     mymap = L.map('mapid').setView([58.972, -97.486], 4);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -31,6 +26,7 @@ function cases() {
         accessToken: 'pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w'
     }).addTo(mymap);
     load_age_graph();
+    load_gender_graph();
     setTimeout(function () {
         load_map()
     }, 500)
@@ -56,9 +52,10 @@ function load_age_graph(){
             }]
         },
         options: {
-            // responsive: true,
+            responsive: true,
             scales: {
                 xAxes: [{
+                    
                     gridLines: {
                         color: 'rgba(255,255,255,0.2)'
                     },
@@ -69,6 +66,53 @@ function load_age_graph(){
                     scaleLabel: {
                         display: true,
                         labelString: "Ages"
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        color: 'rgba(255,255,255,0.2)'
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "# of cases"
+                    }
+                }]
+            }
+        }
+    });
+}
+
+function load_gender_graph(){
+    var ctx = document.getElementById("gender_chart");
+    var myChart2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Male','Female'],
+            datasets: [{
+                label: "# of cases",
+                data: [gender['Male'],gender['Female']],
+                borderWidth: 1,
+                backgroundColor: '#17a2b8',
+            }]
+        },
+        options: {
+            // responsive: true,
+            scales: {
+                xAxes: [{
+                    barPercentage: 0.5,
+                    gridLines: {
+                        color: 'rgba(255,255,255,0.2)'
+                    },
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 80
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Gender"
                     }
                 }],
                 yAxes: [{
@@ -179,11 +223,13 @@ function load_map() {
         $(".spinner-cases").fadeOut()
         $("#mapid").fadeIn()
     }
-
+    //--------------------------------
     $(".spinner-cases").fadeOut()
     $("#mapid").fadeIn();
     $("#prov_chart").fadeIn();
+    $("#gender_chart").fadeIn();
     mymap.invalidateSize();
+    //--------------------------------
 }
 
 

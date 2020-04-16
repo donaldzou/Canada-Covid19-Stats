@@ -32,6 +32,7 @@ var update_time;
 var update_time_split;
 
 var age = {}
+var gender = {}
 
 var temp_list = [];
 
@@ -138,6 +139,13 @@ function getCases() {
                     }
                     else{
                         age[current.age]++;
+                    }
+
+                    if (gender[current.sex] == undefined){
+                        gender[current.sex] = 1;
+                    }
+                    else{
+                        gender[current.sex]++;
                     }
 
 

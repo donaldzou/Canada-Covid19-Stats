@@ -181,6 +181,7 @@
                         <h5 class="card-text compare_yesterday"></h5>
                     </div>
                 </div>
+                <a class="twitter-timeline" data-lang="en" data-theme="dark" href="https://twitter.com/CP24?ref_src=twsrc%5Etfw">Tweets by CP24</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
             <div class="col-sm-8">
                 <div class="card text-white bg-dark mb-3 map">
@@ -188,7 +189,7 @@
                         Map | Canada Reported Cases
                     </div>
                     <div class="card-body">
-                        <div id="mapid"></div>  
+                        <div id="mapid" class="cases_mod"></div>  
                         <div class="text-center spinner-cases">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
@@ -200,7 +201,7 @@
                 </div> 
                 <div class="card text-white bg-dark mb-3 age-table">
                     <div class="card-header">
-                        Table | Canada Reported Cases Age Cumulative
+                        Chart | Canada Reported Cases Age Cumulative
                     </div>
                     <div class="card-body">
                         <div class="text-center spinner-cases">
@@ -208,8 +209,21 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        <canvas id="prov_chart" width="500" height="200"></canvas>
+                        <canvas id="prov_chart" class="cases_mod" width="500" height="200"></canvas>
                     </div>
+                </div>
+                <div class="card text-white bg-dark mb-3 gender-table">
+                    <div class="card-header">
+                        Chart | Canada Reported Cases Gender Cumulative
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <canvas id="gender_chart" class="cases_mod" width="500" height="200"></canvas>
+                    </div> 
                 </div>
             </div>
             
