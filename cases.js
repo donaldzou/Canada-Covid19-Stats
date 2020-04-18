@@ -298,29 +298,15 @@ function load_map() {
                         
                         console.log(address)
                         var rad = prov[t[n]] * 10
-                        if (cur != undefined){
-                            var circle = L.circle([cur['Latitude'], cur['Longitude']], {
-                                color: 'red',
-                                fillColor: '#f03',
-                                fillOpacity: 0.5,
-                                radius: rad,
-        
-                            }).addTo(group1);
-                            circle.bindPopup("<h5>" + t[n] + "</h5><p>" + prov[t[n]] + " cases</p>")
-                        }
-                        else{
-                            $.ajax({
-                                type: "GET",
-                                url: 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+address+'.json?access_token=pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w',
-                                dataType: 'text',
-                                async: false,
-                                success: function (data) {
-                                   var result = JSON.parse(data)
-                                   console.log(t[n])
-                                   console.log(result['features'][0])
-                                }
-                            })
-                        }
+                        var circle = L.circle([cur['Latitude'], cur['Longitude']], {
+                            color: 'red',
+                            fillColor: '#f03',
+                            fillOpacity: 0.5,
+                            radius: rad,
+    
+                        }).addTo(group1);
+                        circle.bindPopup("<h5>" + t[n] + "</h5><p>" + prov[t[n]] + " cases</p>")
+                        
                     }
                 })
             }
@@ -351,7 +337,6 @@ $('#get_province').click(function () {
     $(".province_total_case .totalCases").text(custom_data[$("#province-select").val()]['today'] + ' cases in ' + $("#province-select").val())
     $(".province_total_case .compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
     $("#search-spinner").css('display','inline-block');
-    // $(".cases_mod").fadeOut()
 
     
     
@@ -360,7 +345,6 @@ $('#get_province').click(function () {
     load_news();
     $("#mapid").css("opacity",0.3)
     setTimeout(function () {
-        
         load_map()
     }, 1000)
 
