@@ -48,8 +48,22 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
   }
 
 
-#mapid { height: 600px; }
+#mapid { 
+    height: 600px; 
+    transition: ease-in-out 0.3s;
+}
 
 #province_title{
     color:white
+}
+
+.twi-iframe{
+    width: 100%;
+    height: 700px;
+    border: none;
+    border-radius: 5px;
+}
+
+#search-spinner{
+    display: none;
 }

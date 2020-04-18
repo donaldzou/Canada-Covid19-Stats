@@ -13,12 +13,11 @@
         crossorigin="" />
     <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css'>
     <link rel="stylesheet" href="style.css">
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
     <script src="mapdata.js"></script>
-
 </head>
 
 <body>
@@ -168,12 +167,14 @@
             <div class="col-sm-4">
                 <div class="input-group dropdown-cases">
                     <select class="custom-select" id="province-select" aria-label="Example select with button addon">
-                      <option value="Canada" selected>Canada</option>
+                        <option value="Canada" selected>Canada</option>
                     </select>
                     <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" id="get_province" type="button">Search</button>
+                        <button class="btn btn-outline-secondary" id="get_province" type="button">
+                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Search</button>
                     </div>
-                  </div>
+                </div>
                 <div class="card text-white bg-info mb-3 province_total_case">
                     <div class="card-body">
                         <h5 class="card-title totalCases"></h5>
@@ -181,7 +182,33 @@
                         <h5 class="card-text compare_yesterday"></h5>
                     </div>
                 </div>
-                <a class="twitter-timeline" data-lang="en" data-theme="dark" href="https://twitter.com/CP24?ref_src=twsrc%5Etfw">Tweets by CP24</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header">
+                        News | From @CBC News Alerts
+                    </div>
+                    <div class="card-body">
+                        <div id="twitter-container" class="cases_mod">
+                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators"></ol>
+                                <div class="carousel-inner"></div>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             <div class="col-sm-8">
                 <div class="card text-white bg-dark mb-3 map">
@@ -189,16 +216,14 @@
                         Map | Canada Reported Cases
                     </div>
                     <div class="card-body">
-                        <div id="mapid" class="cases_mod"></div>  
+                        <div id="mapid" class="cases_mod"></div>
                         <div class="text-center spinner-cases">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        
-                        
                     </div>
-                </div> 
+                </div>
                 <div class="card text-white bg-dark mb-3 age-table">
                     <div class="card-header">
                         Chart | Canada Reported Cases Age Cumulative
@@ -223,17 +248,10 @@
                             </div>
                         </div>
                         <canvas id="gender_chart" class="cases_mod" width="500" height="200"></canvas>
-                    </div> 
+                    </div>
                 </div>
             </div>
-            
-          </div>
-
-
-
-       
-        
-          
+        </div>
     </div>
 
 
@@ -252,11 +270,4 @@
 <script src="custom.js"></script>
 <script src='cases.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-
-
-<script>
-
-</script>
-
-
 </html>
