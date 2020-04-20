@@ -14,7 +14,21 @@ var total_Death = 0;
 var custom_data = {}
 var today_Cases = 0;
 var today_Death = 0;
-
+prov_geocode = {
+    "Ontario": {"lat": 43.6487, "lon": -79.38545},
+    "BC": {"lat": 48.42855, "lon": -123.36445},
+    "Quebec": {"lat": 46.81274, "lon": -71.21931},
+    "Alberta": {"lat": 53.54624, "lon": -113.49037},
+    "Saskatchewan": {"lat": 50.44826, "lon": -104.59517},
+    "Manitoba": {"lat": 49.89953, "lon": -97.14113},
+    "New Brunswick": {"lat": 45.96063, "lon": -66.63911},
+    "PEI": {"lat": 46.2366, "lon": -63.12816},
+    "NL": {"lat": 47.56083, "lon": -52.71219},
+    "Nova Scotia": {"lat": 44.64549, "lon": -63.57655},
+    "NWT": {"lat": 62.45446, "lon": -114.37094},
+    "Yukon": {"lat": 60.72086, "lon": -135.05323},
+    "Nunavut": {"lat": 63.75133, "lon": -68.52043}
+}
 var recov_today = 0;
 var recov_yesterday = 0;
 
@@ -26,11 +40,12 @@ var twoDigitMonth_today = ("0" + (today_date.getMonth() + 1)).slice(-2)
 var twoDigitDay_today = ("0" + today_date.getDate()).slice(-2)
 var today = twoDigitDay_today + "-" + twoDigitMonth_today + "-" + today_date.getFullYear();
 
-
+var prov_age = {}
+var prov_gender = {}
 var url = 'https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/update_time.txt';
 var update_time;
 var update_time_split;
-
+var group_national = L.featureGroup();
 var age = {}
 var gender = {}
 
@@ -180,6 +195,7 @@ function getCases() {
                     
                 }
             }
+            
             //Chart start
             for( var n in Object.keys(report_dates)){
                 if (n > 0){
@@ -190,7 +206,7 @@ function getCases() {
             }
             province_list = Object.keys(caseDict['count'])
             province_list.splice(province_list.indexOf('Repatriated'),1)
-            color_list = ["#C2185B","#E040FB",'#1976D2','#00BCD4','#4CAF50','#FF5722','#CDDC39','#616161','#607D8B','#FFC107','#FF9800','#303F9F','#E040FB','#5D4037']
+            color_list = ['#00bcd4','#009688','#259b24','#8bc34a','#ffc107','#ff9800','#ff5722',"#ffffff","#e91e63",'#9c27b0','#673ab7','#3f51b5','#5677fc','#03a9f4']
             for (var n in province_list){
                 var current_province = province_list[n]
                 if (current_province != "Repatriated"){
@@ -280,7 +296,31 @@ function getCases() {
             //Chart end
 
             //Initialize Map
-            $("head").append('<script src="canadamap.js"></script>')
+            var nation = L.map('nation_map').setView([57.133, -95.455], 4.3);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/dark-v10',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w'
+            }).addTo(nation);
+            for (var n in province_list) {
+                    var rad = caseDict['count'][province_list[n]]['count'] * 30
+                    console.log(prov_geocode)
+                    console.log(province_list[n])
+                    var circle = L.circle([prov_geocode[province_list[n]]['lat'], [prov_geocode[province_list[n]]['lon']]], {
+                        color: color_list[n],
+                        fillColor: color_list[n],
+                        fillOpacity: 0.5,
+                        radius: rad
+                    }).addTo(group_national);
+                    circle.bindPopup("<h5>" + province_list[n] + "</h5><p>" + caseDict['count'][province_list[n]]['count'] + " cases</p>")
+            } 
+            
+            nation.addLayer(group_national)
+            $("#nation_map").fadeIn()
+            nation.invalidateSize();
         }
     }
     )
@@ -514,3 +554,51 @@ $(document).ready(function(){
     $(".tab").hide()
     main();
 })
+
+
+
+// Changes XML to JSON
+function xmlToJson(xml) {
+	
+	// Create the return object
+	var obj = {};
+
+	if (xml.nodeType == 1) { // element
+		// do attributes
+		if (xml.attributes.length > 0) {
+		obj["@attributes"] = {};
+			for (var j = 0; j < xml.attributes.length; j++) {
+				var attribute = xml.attributes.item(j);
+				obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+			}
+		}
+	} else if (xml.nodeType == 3) { // text
+		obj = xml.nodeValue;
+	}
+
+	// do children
+	if (xml.hasChildNodes()) {
+		for(var i = 0; i < xml.childNodes.length; i++) {
+			var item = xml.childNodes.item(i);
+			var nodeName = item.nodeName;
+			if (typeof(obj[nodeName]) == "undefined") {
+				obj[nodeName] = xmlToJson(item);
+			} else {
+				if (typeof(obj[nodeName].push) == "undefined") {
+					var old = obj[nodeName];
+					obj[nodeName] = [];
+					obj[nodeName].push(old);
+				}
+				obj[nodeName].push(xmlToJson(item));
+			}
+		}
+	}
+	return obj;
+};
+
+RSS_URL = 'https://rss.cbc.ca/lineup/canada-britishcolumbia.xml'
+
+fetch(RSS_URL)
+  .then(response => response.text())
+  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then(data => console.log(data))

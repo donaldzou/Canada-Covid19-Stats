@@ -9,6 +9,7 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 
 .navbar{
     margin-bottom: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), -1px -20px 6px rgba(0,0,0,0.23);
 }
 .total{
     text-align: center;
@@ -66,4 +67,40 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 
 #search-spinner{
     display: none;
+}
+
+.map{
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: 0.25rem; 
+}
+
+#nation_map{
+    display: none;
+    height: 600px;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.map_body{
+    padding: 0;
+}
+
+
+.map-body .spinner-loader{
+    margin:20px 0px
+}
+
+.local-table{
+    display: none;
+}
+
+.fas{
+    float: right;
+    padding: 4px;
+    cursor: pointer;
+    transition: cubic-bezier(1, -0.71, 0, 1.36) 0.5s;
+}
+
+.card-header p{
+    position:absolute;
 }

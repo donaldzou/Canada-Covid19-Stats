@@ -1,13 +1,13 @@
 var temp_lat;
-
 var longtitude;
-var prov_age = {}
-var prov_geocode = {}
-var group1 = L.featureGroup();
+
+var local_geocode = {}
+var group_local = L.featureGroup();
 var age_chart;
+var gen_chart;
 var news_link = {
     "Canada":{'link':['https://www.cbc.ca/news/covid-19']},
-    "Ontario": { 'link': ['https://www.cbc.ca/news/canada/toronto', 'https://www.cbc.ca/news/canada/ottawa', 'https://www.cbc.ca/news/canada/manitoba', 'https://www.cbc.ca/news/canada/sudbury', 'https://www.cbc.ca/news/canada/london', 'https://www.cbc.ca/news/canada/kitchener-waterloo', 'https://www.cbc.ca/news/canada/hamilton', 'https://www.cbc.ca/news/canada/windsor'] },
+    "Ontario": { 'link': ['https://www.cbc.ca/news/canada/toronto', 'https://www.cbc.ca/news/canada/ottawa', 'https://www.cbc.ca/news/canada/sudbury', 'https://www.cbc.ca/news/canada/london', 'https://www.cbc.ca/news/canada/kitchener-waterloo', 'https://www.cbc.ca/news/canada/hamilton', 'https://www.cbc.ca/news/canada/windsor'] },
     "BC": { 'link': ['https://www.cbc.ca/news/canada/british-columbia'] },
     "Quebec": { 'link': ['https://www.cbc.ca/news/canada/montreal', 'https://www.cbc.ca/news/canada/north',] },
     "Alberta": { 'link': ['https://www.cbc.ca/news/canada/calgary', 'https://www.cbc.ca/news/canada/edmonton'] },
@@ -98,6 +98,7 @@ function load_age_graph() {
     if ($("#province-select").val() == 'Canada'){
         var chart_label = Object.keys(age).sort()
         var data_label = age
+        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
         chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         removeData(age_chart)
     }
@@ -123,6 +124,7 @@ function update_age_graph(){
         }
         var chart_label = Object.keys(prov_age).sort()
         var data_label = prov_age
+        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
         if (chart_label.includes("Not Reported") ){
             chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         }
@@ -131,6 +133,7 @@ function update_age_graph(){
     else{
         var chart_label = Object.keys(age).sort()
         var data_label = age
+        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
         chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         removeData(age_chart)
     }
@@ -155,13 +158,13 @@ function removeData(chart) {
 
 function load_gender_graph() {
     var ctx = document.getElementById("gender_chart");
-    var myChart2 = new Chart(ctx, {
+    gen_chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Male', 'Female'],
+            labels: [],
             datasets: [{
                 label: "# of cases",
-                data: [gender['Male'], gender['Female']],
+                data: [],
                 borderWidth: 1,
                 backgroundColor: '#17a2b8',
             }]
@@ -198,10 +201,62 @@ function load_gender_graph() {
             }
         }
     });
+    if ($("#province-select").val() == 'Canada'){
+        removeData(gen_chart)
+        var gen = ['Male', 'Female']
+        $(".gender-table .graph_note").text('*'+gender['Not Reported']+' cases not reported.')
+        for (var n in gen){
+            gen_chart.data.labels.push(gen[n])
+            gen_chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(gender[gen[n]]);
+            });
+            gen_chart.update();
+        }
+    }    
+}
+
+
+function update_gender_graph(){
+    if ($("#province-select").val() == 'Canada'){
+        removeData(gen_chart)
+        var gen = ['Male', 'Female']
+        $(".gender-table .graph_note").text('*'+gender['Not Reported']+' cases not reported.')
+        for (var n in gen){
+            gen_chart.data.labels.push(gen[n])
+            gen_chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(gender[gen[n]]);
+            });
+            gen_chart.update();
+        }
+    }
+    else{
+        prov_gender = {}
+        removeData(gen_chart)
+        for (var n in caseDict['count'][$("#province-select").val()]['cases']){
+           if (prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] == undefined){
+               prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] = 1
+           }
+           else{
+               prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']]++
+           }
+        }
+        console.log(prov_gender)
+        var gen = ['Male', 'Female']
+        $(".gender-table .graph_note").text('*'+prov_gender['Not Reported']+' cases not reported.')
+        for(var n in gen){
+            gen_chart.data.labels.push(gen[n])
+            gen_chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(prov_gender[gen[n]]);
+            });
+            gen_chart.update();
+        }
+        
+    }
 }
 
 
 function load_news(){
+    $(".news-header").text('News | From @CBC '+$("#province-select").val())
     $('#twitter-container .carousel-inner').html('')
     $('#twitter-container .carousel-inner').html('')
     link_length = news_link[$("#province-select").val()]['link'].length
@@ -219,42 +274,15 @@ function load_news(){
 
 
 function load_map() {
-
     var list_data = [];
-
-
     if ($("#province-select").val() == 'Canada') {
         mymap.setView([58.972, -97.486], 4)
-        for (var n in province_list) {
-            if (province_list[n] == 'NWT') { var address = 'Northwest Territories Canada'; }
-            else if (province_list[n] == 'PEI') { var address = 'Prince Edward Island Canada'; }
-            else { var address = province_list[n] + ' Canada'; }
-            temp_lat = $.ajax({
-                type: "GET",
-                url: 'https://nominatim.openstreetmap.org/search?format=json&q=' + address,
-                dataType: 'text',
-                async: false,
-                success: function (data) {
-                    list_data.push(JSON.parse(data))
-                    var cur = list_data[list_data.length - 1][0]
-                    prov_geocode[province_list[n]] = { 'lat': cur['lat'], 'lon': cur['lon'] }
-                    var rad = caseDict['count'][province_list[list_data.length - 1]]['count'] * 40
-                    var circle = L.circle([cur['lat'], cur['lon']], {
-                        color: 'red',
-                        fillColor: '#f03',
-                        fillOpacity: 0.5,
-                        radius: rad,
-
-                    }).addTo(group1);
-                    circle.bindPopup("<h5>" + province_list[list_data.length - 1] + "</h5><p>" + caseDict['count'][province_list[list_data.length - 1]]['count'] + " cases</p>")
-                }
-            })
-        }
-        mymap.addLayer(group1)
+        mymap.addLayer(group_national)
+        mymap.removeLayer(group_local)
     }
     else {
-        mymap.removeLayer(group1)
-        group1 = L.featureGroup();
+        mymap.removeLayer(group_national)
+        group_local = L.featureGroup();
         var prov = {}
         for (var n in caseDict["count"][$("#province-select").val()]['cases']) {
             var current_case = caseDict["count"][$("#province-select").val()]['cases'][n]
@@ -275,44 +303,53 @@ function load_map() {
                 if (t[n] == "NWT") {
                     t[n] = "Northwest Territories"
                 }
-                var temp = t[n]
-                if ($("#province-select").val() == 'Nova Scotia' || $("#province-select").val() == 'New Brunswick') {
-                    temp = temp.replace('Zone', '')
-                    temp = temp.replace('-', '')
-                    temp = temp.replace(/[0-9]/g, "")
-                    temp = temp.replace('(','')
-                    temp = temp.replace(')','')
-                    temp = temp.replace(' area','')
-                }
-                var address = temp + ' ' + $("#province-select").val() + " Canada"
-                temp_lat = $.ajax({
-                    type: "GET",
-                    url: 'https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext='+address+'&apiKey=1VOe2SSnYK_atMeC1iN-KrCYh_T9T8oqALHXPv_O0FE',
-                    dataType: 'text',
-                    async: false,
-                    success: function (data) {
-                        // list_data.push(JSON.parse(data))
-                        var cur = JSON.parse(data)
-                        console.log(cur)
-                        cur = cur["Response"]["View"][0]["Result"][0]["Location"]['NavigationPosition'][0]
-                        
-                        console.log(address)
-                        var rad = prov[t[n]] * 10
-                        var circle = L.circle([cur['Latitude'], cur['Longitude']], {
-                            color: 'red',
-                            fillColor: '#f03',
-                            fillOpacity: 0.5,
-                            radius: rad,
-    
-                        }).addTo(group1);
-                        circle.bindPopup("<h5>" + t[n] + "</h5><p>" + prov[t[n]] + " cases</p>")
-                        
+                if (local_geocode[t[n]] == undefined){
+                    var temp = t[n]
+                    if ($("#province-select").val() == 'Nova Scotia' || $("#province-select").val() == 'New Brunswick') {
+                        temp = temp.replace('Zone', '')
+                        temp = temp.replace('-', '')
+                        temp = temp.replace(/[0-9]/g, "")
+                        temp = temp.replace('(','')
+                        temp = temp.replace(')','')
+                        temp = temp.replace(' area','')
                     }
-                })
+                    var address = temp + ' ' + $("#province-select").val() + " Canada"
+                    temp_lat = $.ajax({
+                        type: "GET",
+                        url: 'https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=4&searchtext='+address+'&apiKey=1VOe2SSnYK_atMeC1iN-KrCYh_T9T8oqALHXPv_O0FE',
+                        dataType: 'text',
+                        async: false,
+                        success: function (data) {
+                            var cur = JSON.parse(data)
+
+                            cur = cur["Response"]["View"][0]["Result"][0]["Location"]['NavigationPosition'][0]
+                            var rad = prov[t[n]]
+                            var circle = L.circle([cur['Latitude'], cur['Longitude']], {
+                                color: 'red',
+                                fillColor: '#f03',
+                                fillOpacity: 0.5,
+                                radius: rad,
+                            }).addTo(group_local);
+                            local_geocode[t[n]] = {'Latitude':cur['Latitude'],'Longitude':cur['Longitude']}
+                            circle.bindPopup("<h5>" + t[n] + "</h5><p>" + prov[t[n]] + " cases</p>")
+                        }
+                    })
+                }
+                else{
+                    var rad = prov[t[n]]
+                    var circle = L.circle([local_geocode[t[n]]['Latitude'],local_geocode[t[n]]['Longitude']], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: rad,
+                    }).addTo(group_local);
+                    circle.bindPopup("<h5>" + t[n] + "</h5><p>" + prov[t[n]] + " cases</p>")
+                }
+                
             }
             
         }
-        mymap.addLayer(group1)
+        mymap.addLayer(group_local)
         mymap.setView(new L.LatLng(prov_geocode[$("#province-select").val()]['lat'], prov_geocode[$("#province-select").val()]['lon']), 5);
         $(".spinner-cases").fadeOut()
         $("#mapid").fadeIn()
@@ -338,14 +375,29 @@ $('#get_province').click(function () {
     $(".province_total_case .compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
     $("#search-spinner").css('display','inline-block');
 
-    
+    $(".news-header").text('News | From @CBC '+$("#province-select").val())
     
     
     update_age_graph();
+    update_gender_graph();
     load_news();
     $("#mapid").css("opacity",0.3)
     setTimeout(function () {
         load_map()
-    }, 1000)
+    }, 500)
 
 })
+
+$(".fas.fa-times").click(function(){
+    if($(this).parent().parent().find(".card-body").css('display') == 'none'){
+        $(this).parent().parent().find(".card-body").fadeIn()
+        $(this).css('transform','rotate(0deg)')
+    }
+    else{
+        $(this).parent().parent().find(".card-body").fadeOut()
+        $(this).css('transform','rotate(135deg)')
+    }
+    
+});
+
+
