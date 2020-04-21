@@ -1,5 +1,6 @@
 var caseDict = {"cases":[],"count":{}}
 var report_dates = {}
+var death_report = {}
 var report_country_amount = []
 var deathDict = {"cases":[]}
 var death_report_dates = {}
@@ -14,6 +15,8 @@ var total_Death = 0;
 var custom_data = {}
 var today_Cases = 0;
 var today_Death = 0;
+var temp_l = {}
+var temp_percent = {}
 prov_geocode = {
     "Ontario": {"lat": 43.6487, "lon": -79.38545},
     "BC": {"lat": 48.42855, "lon": -123.36445},
@@ -296,7 +299,13 @@ function getCases() {
             //Chart end
 
             //Initialize Map
-            var nation = L.map('nation_map').setView([57.133, -95.455], 4.3);
+            var width = $(window).width();
+            if (width <= 768){
+                var nation = L.map('nation_map').setView([57.133, -95.455], 3);
+            }
+            else{
+                var nation = L.map('nation_map').setView([57.133, -95.455], 4.3);
+            }
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
@@ -307,8 +316,6 @@ function getCases() {
             }).addTo(nation);
             for (var n in province_list) {
                     var rad = caseDict['count'][province_list[n]]['count'] * 30
-                    console.log(prov_geocode)
-                    console.log(province_list[n])
                     var circle = L.circle([prov_geocode[province_list[n]]['lat'], [prov_geocode[province_list[n]]['lon']]], {
                         color: color_list[n],
                         fillColor: color_list[n],
@@ -354,9 +361,44 @@ function getDead() {
                     else{
                         death_report_dates[date_death]['province'][current.province]++
                     }
-
-
+                    if (death_report_dates[date_death]['count'] == undefined){
+                        death_report_dates[date_death]['count'] = 1
+                    }
+                    else{
+                        death_report_dates[date_death]['count']++
+                    }
+                    
                 }
+
+                var dates = Object.keys(death_report_dates)
+                for (var n in dates){
+                    if (n == 0){
+                        death_report_dates[dates[n]]['cumulative'] = 1
+                    }
+                    else{
+                        death_report_dates[dates[n]]['cumulative'] = death_report_dates[dates[n-1]]['cumulative']+death_report_dates[dates[n]]['count']
+                    }
+                }
+                
+                for (var n in province_dataset[0]['data']){
+                    temp_l[Object.keys(report_dates)[n]] = province_dataset[0]['data'][n]
+                }
+                var middle = 0
+                var mid = 0
+                for (var n in dates){
+
+                    temp_percent[dates[n]] =  death_report_dates[dates[n]]['cumulative']/temp_l[dates[n]]
+                    if (n > 0){
+                        console.log(dates[n])
+                        console.log(temp_percent[dates[n]] - temp_percent[dates[n-1]])
+                        mid += temp_percent[dates[n]]
+                        middle += temp_percent[dates[n]] - temp_percent[dates[n-1]]
+                    }
+                }
+                console.log('Average:'+mid/dates.length)
+                console.log("Average rate:"+middle/dates.length)
+
+
             }
             $(".totalDeath").text(thousands_separators(total_Death));
             $(".compare_yesterday_death").text(thousands_separators(today_Death)+" New deaths")
@@ -595,10 +637,3 @@ function xmlToJson(xml) {
 	}
 	return obj;
 };
-
-RSS_URL = 'https://rss.cbc.ca/lineup/canada-britishcolumbia.xml'
-
-fetch(RSS_URL)
-  .then(response => response.text())
-  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-  .then(data => console.log(data))

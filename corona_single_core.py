@@ -25,5 +25,6 @@ for n in table:
     else:
         data.append(n.text)
 end = time.time()
+print("Start grabbing data... COVID-19 Stats from Wikipedia")
 print("Time used:", end-start,"seconds.")
 bot.close()

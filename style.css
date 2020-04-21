@@ -104,3 +104,9 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 .card-header p{
     position:absolute;
 }
+
+@media only screen and (max-width: 768px) {
+    .leaflet-container{
+        height: 400px !important;
+    }
+}
