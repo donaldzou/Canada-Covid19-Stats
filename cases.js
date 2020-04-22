@@ -337,7 +337,7 @@ function load_map() {
         
         $.ajax({
             type: "GET",
-            url: "/geo_data/"+$("#province-select").val()+'.json',
+            url: "geo_data/"+$("#province-select").val()+'.json',
             dataType: "text",
             async: false,
             success: function (data) {
