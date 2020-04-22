@@ -370,35 +370,6 @@ function getDead() {
                     
                 }
 
-                var dates = Object.keys(death_report_dates)
-                for (var n in dates){
-                    if (n == 0){
-                        death_report_dates[dates[n]]['cumulative'] = 1
-                    }
-                    else{
-                        death_report_dates[dates[n]]['cumulative'] = death_report_dates[dates[n-1]]['cumulative']+death_report_dates[dates[n]]['count']
-                    }
-                }
-                
-                for (var n in province_dataset[0]['data']){
-                    temp_l[Object.keys(report_dates)[n]] = province_dataset[0]['data'][n]
-                }
-                var middle = 0
-                var mid = 0
-                for (var n in dates){
-
-                    temp_percent[dates[n]] =  death_report_dates[dates[n]]['cumulative']/temp_l[dates[n]]
-                    if (n > 0){
-                        console.log(dates[n])
-                        console.log(temp_percent[dates[n]] - temp_percent[dates[n-1]])
-                        mid += temp_percent[dates[n]]
-                        middle += temp_percent[dates[n]] - temp_percent[dates[n-1]]
-                    }
-                }
-                console.log('Average:'+mid/dates.length)
-                console.log("Average rate:"+middle/dates.length)
-
-
             }
             $(".totalDeath").text(thousands_separators(total_Death));
             $(".compare_yesterday_death").text(thousands_separators(today_Death)+" New deaths")

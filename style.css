@@ -8,7 +8,7 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .navbar{
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), -1px -20px 6px rgba(0,0,0,0.23);
 }
 .total{
@@ -44,15 +44,10 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .dropdown-cases {
-    margin-top:10px;
     margin-bottom:10px;
   }
 
 
-#mapid { 
-    height: 600px; 
-    transition: ease-in-out 0.3s;
-}
 
 #province_title{
     color:white
@@ -70,15 +65,17 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .map{
-    border-bottom-left-radius: .25rem;
-    border-bottom-right-radius: 0.25rem; 
+    height: 500px;
+    margin-bottom: 20px;
+    border-radius: 0.25rem;
+    transition: ease-in-out 0.3s;
 }
 
 #nation_map{
     display: none;
-    height: 600px;
-    border-bottom-left-radius: .25rem;
-    border-bottom-right-radius: 0.25rem;
+    height: 500px;
+    margin-bottom: 20px;
+    border-radius: 0.25rem;
 }
 
 .map_body{
@@ -109,4 +106,8 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     .leaflet-container{
         height: 400px !important;
     }
+}
+
+.region_table{
+    display: none;
 }

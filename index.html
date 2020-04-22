@@ -40,19 +40,9 @@
         </div>
     </nav>
 
-    <div id="nation_map"></div>
+    
     <div class="tab container-fluid main tab">
-        <div class="card text-white bg-dark mb-3 map_container main_card">
-            <div class="card-header">Map | Reported Case</div>
-            <div class="card-body map_body">
-                <div class="text-center spinner-loader">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-                <!-- <div id="map"></div> -->
-            </div>
-        </div>
+        <div id="nation_map" class='map'></div>
         <div class="row">
             <div class="col-sm-3">  
                 <div class="card text-white bg-dark mb-3 ">
@@ -161,6 +151,7 @@
     </div>
 
     <div class='tab container-fluid cases'>
+        <div id="mapid" class="cases_mod map"></div>
         <div class="row">
             <div class="col-sm-4">
                 <div class="input-group dropdown-cases">
@@ -180,49 +171,26 @@
                         <h5 class="card-text compare_yesterday"></h5>
                     </div>
                 </div>
-                <div class="card text-white bg-dark mb-3">
+                <div class="card text-white bg-dark mb-3 region_table">
                     <div class="card-header">
-                        <p class='news-header'></p>
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times" aria-hidden="true"></i>
                     </div>
                     <div class="card-body">
-                        <div id="twitter-container" class="cases_mod">
-                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators"></ol>
-                                <div class="carousel-inner"></div>
-                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="text-center spinner-cases">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-
+                        <table class="table table-dark table-sm">
+                            <thead>
+                              <tr>
+                                <th scope="col">Health Region</th>
+                                <th scope="col"># of Case</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              
+                            </tbody>
+                          </table>
                     </div>
                 </div>
             </div>
             <div class="col-sm-8">
-                <div class="card text-white bg-dark mb-3 map">
-                    <div class="card-header">
-                        Map | Canada Reported Cases
-                    </div>
-                    <div class="card-body map_body">
-                        <div id="mapid" class="cases_mod map"></div>
-                        <div class="text-center spinner-cases">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="card text-white bg-dark mb-3 age-table">
                     <div class="card-header">
                         Chart | Canada Reported Cases Age Cumulative
@@ -233,8 +201,6 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        <canvas id="prov_chart" class="cases_mod" width="500" height="200"></canvas>
-                        <p class="graph_note" style="text-align: right; font-size:10px"></p>
                          
                     </div>
                 </div>
@@ -248,20 +214,7 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        <canvas id="gender_chart" class="cases_mod" width="500" height="200"></canvas>
                         <p class="graph_note" style="text-align: right; font-size:10px"></p>
-                    </div>
-                </div>
-                <div class="card text-white bg-dark mb-3 local-table">
-                    <div class="card-header">
-                        Chart | Canada Reported Cases Gender Cumulative
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center spinner-cases">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
