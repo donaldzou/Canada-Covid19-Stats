@@ -8,40 +8,27 @@ var gen_chart;
 var geo_code = {}
 var geo_temp;
 var screen_width = $(window).width()
-var news_link = {
-    "Canada":{'link':['https://www.cbc.ca/news/covid-19']},
-    "Ontario": { 'link': ['https://www.cbc.ca/news/canada/toronto', 'https://www.cbc.ca/news/canada/ottawa', 'https://www.cbc.ca/news/canada/sudbury', 'https://www.cbc.ca/news/canada/london', 'https://www.cbc.ca/news/canada/kitchener-waterloo', 'https://www.cbc.ca/news/canada/hamilton', 'https://www.cbc.ca/news/canada/windsor'] },
-    "BC": { 'link': ['https://www.cbc.ca/news/canada/british-columbia'] },
-    "Quebec": { 'link': ['https://www.cbc.ca/news/canada/montreal', 'https://www.cbc.ca/news/canada/north',] },
-    "Alberta": { 'link': ['https://www.cbc.ca/news/canada/calgary', 'https://www.cbc.ca/news/canada/edmonton'] },
-    "Saskatchewan": { 'link': ['https://www.cbc.ca/news/canada/saskatchewan', 'https://www.cbc.ca/news/canada/saskatoon'] },
-    "Manitoba": { 'link': ['https://www.cbc.ca/news/canada/manitoba'] },
-    "New Brunswick": { 'link': ['https://www.cbc.ca/news/canada/new-brunswick'] },
-    "PEI": { 'link': ['https://www.cbc.ca/news/canada/prince-edward-island'] },
-    "NL": { 'link': ['https://www.cbc.ca/news/canada/newfoundland-labrador'] },
-    "Nova Scotia": { 'link': ['https://www.cbc.ca/news/canada/nova-scotia'] },
-    "NWT": { 'link': ['https://www.cbc.ca/news/canada/north'] },
-    "Yukon": { 'link': ['https://www.cbc.ca/news/canada/north'] },
-    "Nunavut": { 'link': ['https://www.cbc.ca/news/canada/north'] }
-}
+var region_dataset = [];
+var region_data = {};
+var region_chart;
 
 
 
 
 function cases() {
-    if($('.cases_link').hasClass("active") == false){
+    if ($('.cases_link').hasClass("active") == false) {
         $.ajax({
             type: "GET",
-            url:"https://raw.githubusercontent.com/sitrucp/canada_covid_health_regions/master/health_regions_lookup.csv",
-            dataType:"text",
-            success: function(data){
+            url: "https://raw.githubusercontent.com/sitrucp/canada_covid_health_regions/master/health_regions_lookup.csv",
+            dataType: "text",
+            success: function (data) {
                 geo_temp = $.csv.toObjects(data)
-                for (var n in geo_temp){
-                    if (geo_code[geo_temp[n]['province']] == undefined){
+                for (var n in geo_temp) {
+                    if (geo_code[geo_temp[n]['province']] == undefined) {
                         geo_code[geo_temp[n]['province']] = {}
                     }
                     geo_code[geo_temp[n]['province']][geo_temp[n]['statscan_arcgis_health_region']] = geo_temp[n]['authority_report_health_region']
-                }      
+                }
             }
         })
         $(".nav-link").removeClass("active");
@@ -63,6 +50,7 @@ function cases() {
         }).addTo(mymap);
         load_age_graph();
         load_gender_graph();
+        load_region_graph()
         setTimeout(function () {
             load_map()
         }, 500)
@@ -70,10 +58,10 @@ function cases() {
 }
 
 function load_age_graph() {
-    if (screen_width <= 768){
+    if (screen_width <= 768) {
         $(".age-table .card-body").append('<canvas id="prov_chart" class="cases_mod" width="500" height="400"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
-    else{
+    else {
         $(".age-table .card-body").append('<canvas id="prov_chart" class="cases_mod" width="500" height="200"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     var ctx = document.getElementById("prov_chart");
@@ -120,10 +108,10 @@ function load_age_graph() {
             }
         }
     });
-    if ($("#province-select").val() == 'Canada'){
+    if ($("#province-select").val() == 'Canada') {
         var chart_label = Object.keys(age).sort()
         var data_label = age
-        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
+        $(".age-table .graph_note").text('*' + data_label['Not Reported'] + ' cases not reported.')
         chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         removeData(age_chart)
     }
@@ -136,29 +124,29 @@ function load_age_graph() {
     }
 }
 
-function update_age_graph(){
-    if ($("#province-select").val() != "Canada"){
+function update_age_graph() {
+    if ($("#province-select").val() != "Canada") {
         prov_age = {}
-        for (var n in caseDict['count'][$("#province-select").val()]['cases']){
-            if (prov_age[caseDict['count'][$("#province-select").val()]['cases'][n]['age']] == undefined){
+        for (var n in caseDict['count'][$("#province-select").val()]['cases']) {
+            if (prov_age[caseDict['count'][$("#province-select").val()]['cases'][n]['age']] == undefined) {
                 prov_age[caseDict['count'][$("#province-select").val()]['cases'][n]['age']] = 1
             }
-            else{
+            else {
                 prov_age[caseDict['count'][$("#province-select").val()]['cases'][n]['age']]++
             }
         }
         var chart_label = Object.keys(prov_age).sort()
         var data_label = prov_age
-        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
-        if (chart_label.includes("Not Reported") ){
+        $(".age-table .graph_note").text('*' + data_label['Not Reported'] + ' cases not reported.')
+        if (chart_label.includes("Not Reported")) {
             chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         }
         removeData(age_chart)
     }
-    else{
+    else {
         var chart_label = Object.keys(age).sort()
         var data_label = age
-        $(".age-table .graph_note").text('*'+data_label['Not Reported']+' cases not reported.')
+        $(".age-table .graph_note").text('*' + data_label['Not Reported'] + ' cases not reported.')
         chart_label.splice(chart_label.indexOf("Not Reported"), 1)
         removeData(age_chart)
     }
@@ -182,10 +170,10 @@ function removeData(chart) {
 }
 
 function load_gender_graph() {
-    if (screen_width <= 768){
+    if (screen_width <= 768) {
         $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="400"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
-    else{
+    else {
         $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="200"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     var ctx = document.getElementById("gender_chart");
@@ -201,7 +189,7 @@ function load_gender_graph() {
             }]
         },
         options: {
-            // responsive: true,
+            
             scales: {
                 xAxes: [{
                     barPercentage: 0.5,
@@ -232,27 +220,11 @@ function load_gender_graph() {
             }
         }
     });
-    if ($("#province-select").val() == 'Canada'){
+    if ($("#province-select").val() == 'Canada') {
         removeData(gen_chart)
         var gen = ['Male', 'Female']
-        $(".gender-table .graph_note").text('*'+gender['Not Reported']+' cases not reported.')
-        for (var n in gen){
-            gen_chart.data.labels.push(gen[n])
-            gen_chart.data.datasets.forEach((dataset) => {
-                dataset.data.push(gender[gen[n]]);
-            });
-            gen_chart.update();
-        }
-    }    
-}
-
-
-function update_gender_graph(){
-    if ($("#province-select").val() == 'Canada'){
-        removeData(gen_chart)
-        var gen = ['Male', 'Female']
-        $(".gender-table .graph_note").text('*'+gender['Not Reported']+' cases not reported.')
-        for (var n in gen){
+        $(".gender-table .graph_note").text('*' + gender['Not Reported'] + ' cases not reported.')
+        for (var n in gen) {
             gen_chart.data.labels.push(gen[n])
             gen_chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(gender[gen[n]]);
@@ -260,46 +232,43 @@ function update_gender_graph(){
             gen_chart.update();
         }
     }
-    else{
+}
+
+
+function update_gender_graph() {
+    if ($("#province-select").val() == 'Canada') {
+        removeData(gen_chart)
+        var gen = ['Male', 'Female']
+        $(".gender-table .graph_note").text('*' + gender['Not Reported'] + ' cases not reported.')
+        for (var n in gen) {
+            gen_chart.data.labels.push(gen[n])
+            gen_chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(gender[gen[n]]);
+            });
+            gen_chart.update();
+        }
+    }
+    else {
         prov_gender = {}
         removeData(gen_chart)
-        for (var n in caseDict['count'][$("#province-select").val()]['cases']){
-           if (prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] == undefined){
-               prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] = 1
-           }
-           else{
-               prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']]++
-           }
+        for (var n in caseDict['count'][$("#province-select").val()]['cases']) {
+            if (prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] == undefined) {
+                prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']] = 1
+            }
+            else {
+                prov_gender[caseDict['count'][$("#province-select").val()]['cases'][n]['sex']]++
+            }
         }
-        console.log(prov_gender)
         var gen = ['Male', 'Female']
-        $(".gender-table .graph_note").text('*'+prov_gender['Not Reported']+' cases not reported.')
-        for(var n in gen){
+        $(".gender-table .graph_note").text('*' + prov_gender['Not Reported'] + ' cases not reported.')
+        for (var n in gen) {
             gen_chart.data.labels.push(gen[n])
             gen_chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(prov_gender[gen[n]]);
             });
             gen_chart.update();
         }
-        
-    }
-}
 
-
-function load_news(){
-    $(".news-header").text('News | From @CBC '+$("#province-select").val())
-    $('#twitter-container .carousel-inner').html('')
-    $('#twitter-container .carousel-inner').html('')
-    link_length = news_link[$("#province-select").val()]['link'].length
-    for (var n = 0; n<link_length; n++){
-        $('#twitter-container .carousel-indicators').append('<li data-target="#carouselExampleIndicators" data-slide-to="'+n+'" class="active"></li>')
-        if (n == 0){
-            $('#twitter-container .carousel-inner').append('<div class="carousel-item active"><iframe class="twi-iframe" src="'+news_link[$("#province-select").val()]['link'][n]+'"></iframe></div>')
-        }
-        else{
-            $('#twitter-container .carousel-inner').append('<div class="carousel-item"><iframe class="twi-iframe" src="'+news_link[$("#province-select").val()]['link'][n]+'"></iframe></div>')
-        }
-        
     }
 }
 
@@ -309,15 +278,16 @@ function load_map() {
     var list_data = [];
     if ($("#province-select").val() == 'Canada') {
         var width = $(window).width();
-        if (width <= 768){
+        if (width <= 768) {
             mymap.setView([57.133, -95.455], 3)
         }
-        else{
+        else {
             mymap.setView([57.133, -95.455], 4)
         }
-       
+
         mymap.addLayer(group_national)
         mymap.removeLayer(group_local)
+        $(".region_table").fadeOut()
     }
     else {
         mymap.removeLayer(group_local)
@@ -334,34 +304,32 @@ function load_map() {
                 prov[current_case.health_region]++;
             }
         }
-        
+
         $.ajax({
             type: "GET",
-            url: "geo_data/"+$("#province-select").val()+'.json',
+            url: "geo_data/" + $("#province-select").val() + '.json',
             dataType: "text",
             async: false,
             success: function (data) {
                 geo = JSON.parse(data)
-                for (var n in geo["features"]){
-                    if (prov[geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]] == undefined){
+                for (var n in geo["features"]) {
+                    if (prov[geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]] == undefined) {
                         geo["features"][n]["properties"]["AMOUNT"] = '0'
                         geo["features"][n]["properties"]["AMOUNT_INT"] = 0
                         geo["features"][n]["properties"]["NAME"] = geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]
                     }
-                    else{
+                    else {
                         geo["features"][n]["properties"]["AMOUNT"] = prov[geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]].toString();
                         geo["features"][n]["properties"]["AMOUNT_INT"] = prov[geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]]
                         geo["features"][n]["properties"]["NAME"] = geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]
                     }
-                    console.log(geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]])
-                    console.log(prov[geo_code[$("#province-select").val()][geo["features"][n]["properties"]["ENG_LABEL"]]])
                 }
-                L.geoJSON(geo,{
+                L.geoJSON(geo, {
                     style: function (feature) {
                         return {
                             color: getColor(feature.properties.AMOUNT_INT),
                             fillOpacity: 0.3,
-                            weight:1
+                            weight: 1
                         };
                     }
                 }).bindPopup(function (layer) {
@@ -377,13 +345,13 @@ function load_map() {
         load_table()
         $(".region_table").fadeIn()
 
-        
+
     }
     //--------------------------------
     $(".spinner-cases").fadeOut();
     $("#search-spinner").fadeOut();
     $(".cases_mod").fadeIn();
-    $("#mapid").css("opacity",1)
+    $("#mapid").css("opacity", 1)
     mymap.invalidateSize();
     //--------------------------------
 }
@@ -391,30 +359,135 @@ function load_map() {
 
 function getColor(n) {
     return n > 3000 ? '#B90000'
-        : n > 2000 ? '#FF0000' 
-        : n > 1000 ? '#FF4E00' 
+        : n > 2000 ? '#FF0000'
+        : n > 1000 ? '#FF4E00'
         : n > 500 ? '#FF5E00'
-        : n > 250  ? '#FF8100'
-        : n > 100  ? '#FFAA00'
-        : n > 50  ? '#FFAA00'
-        : n > 10  ? '#FFAA00'
-        : n > -1  ? '#ffffff'
+        : n > 250 ? '#FF8100'
+        : n > 100 ? '#FFAA00'
+        : n > 50 ? '#FFAA00'
+        : n > 10 ? '#FFAA00'
+        : n > -1 ? '#ffffff'
         : '#ffffff';
 }
 
 
-function load_table(){
-    if ($("#province-select").val() != "Canada"){
+function load_table() {
+    if ($("#province-select").val() != "Canada") {
         $(".region_table tbody").html('');
         var l = Object.keys(prov).sort()
-        for (var n in l){
-            $(".region_table tbody").append('<tr><td scope="row">'+l[n]+'</td><td>'+prov[l[n]]+'</td></tr>')
+        for (var n in l) {
+            $(".region_table tbody").append('<tr><td scope="row">' + l[n] + '</td><td>' + prov[l[n]] + '</td></tr>')
         }
     }
 }
 
+function load_region_graph(){
+    $.ajax({
+        type: "GET",
+        url: "https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv",
+        dataType: "text",
+        async: false,
+        success: function (data) {
+            var temp = $.csv.toObjects(data)
+            for (var n in temp){
+                if (region_data[temp[n]['province']] == undefined){
+                    region_data[temp[n]['province']] = {}
+                }
+                if (region_data[temp[n]['province']][temp[n]['health_region']] == undefined){
+                    region_data[temp[n]['province']][temp[n]['health_region']] = {}
+                }
+                region_data[temp[n]['province']][temp[n]['health_region']][temp[n]['date_report']] = temp[n]['cumulative_cases']
+                
+            }
+            
+        }
+    })
 
+    region_dataset = province_dataset
+    region_dataset.shift()
+    var ctx = document.getElementById("regionChart");
+    region_chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        responsive: true,
+        options: {
+            scales: {
+                yAxes: [{
+                    gridLines:{
+                        color:'rgba(255,255,255,0.2)'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: 'white'
+                    },
+                    scaleLabel:{
+                        display: true,
+                        labelString:"Cases"
+                    }
+                }],
+                xAxes: [{   
+                    ticks: {
+                        fontColor: "white"
+                    },
+                    gridLines:{
+                        color:'rgba(255,255,255,0.2)'
+                    },
+                    scaleLabel:{
+                        display:true,
+                        labelString:"Dates"
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'white'
+                }
+            },  
+        }
+    });
+    if ($("#province-select").val() == 'Canada'){
+        region_chart.data.labels = label
+        region_chart.data.datasets = region_dataset
+        region_chart.update();
+    }  
+}
 
+function update_region_graph(){
+    if ($("#province-select").val() == 'Canada'){
+        region_chart.data.labels = label
+        region_chart.data.datasets = region_dataset
+        region_chart.update();
+    } 
+    else{
+        var region_label = Object.keys(region_data['Ontario']['Toronto'])
+        region_dataset = []
+        var current_data = region_data[$("#province-select").val()]
+
+        for (var n in Object.keys(current_data)){
+            if (Object.keys(current_data)[n] != 'Not Reported'){
+                var current_region = current_data[Object.keys(current_data)[n]]
+                var region_temp = {
+                    label: Object.keys(current_data)[n],
+                    data:[],
+                    borderColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+                    fill: false
+                }
+                for (var a in Object.keys(current_region)){
+                    region_temp.data.push(current_region[Object.keys(current_region)[a]])
+                }
+                region_dataset.push(region_temp)
+            }
+            
+        }
+        region_chart.data.labels = region_label
+        region_chart.data.datasets = region_dataset
+        region_chart.update()
+    }
+}
 
 $('#get_province').click(function () {
     $("#province_title").text($("#province-select").val())
@@ -422,36 +495,29 @@ $('#get_province').click(function () {
     $(".age-table .card-header").text('Map | ' + $("#province-select").val() + ' Reported Cases Age Cumulative')
     $(".province_total_case .totalCases").text(custom_data[$("#province-select").val()]['today'] + ' cases in ' + $("#province-select").val())
     $(".province_total_case .compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
-    $("#search-spinner").css('display','inline-block');
-    $(".region_table .card-header").html('Table | '+$("#province-select").val()+' Health Regions Cases<i class="fas fa-times" aria-hidden="true"></i>')
+    $("#search-spinner").css('display', 'inline-block');
+    $(".region_table .card-header").html('Table | ' + $("#province-select").val() + ' Health Regions Cases<i class="fas fa-times" aria-hidden="true"></i>')
     close_button()
-
-    
-    
-    
-      
+    update_region_graph()
     update_age_graph();
     update_gender_graph();
-    // load_news();
-    $("#mapid").css("opacity",0.3)
+    $("#mapid").css("opacity", 0.3)
     setTimeout(function () {
         load_map()
     }, 500)
-    
-
 })
 
-function close_button(){
-    $(".fas.fa-times").click(function(){
-        if($(this).parent().parent().find(".card-body").css('display') == 'none'){
+function close_button() {
+    $(".fas.fa-times").click(function () {
+        if ($(this).parent().parent().find(".card-body").css('display') == 'none') {
             $(this).parent().parent().find(".card-body").fadeIn()
-            $(this).css('transform','rotate(0deg)')
+            $(this).css('transform', 'rotate(0deg)')
         }
-        else{
+        else {
             $(this).parent().parent().find(".card-body").fadeOut()
-            $(this).css('transform','rotate(135deg)')
+            $(this).css('transform', 'rotate(135deg)')
         }
-        
+
     });
 }
 

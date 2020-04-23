@@ -17,6 +17,7 @@ var today_Cases = 0;
 var today_Death = 0;
 var temp_l = {}
 var temp_percent = {}
+var label;
 prov_geocode = {
     "Ontario": {"lat": 43.6487, "lon": -79.38545},
     "BC": {"lat": 48.42855, "lon": -123.36445},
@@ -248,7 +249,7 @@ function getCases() {
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
-            var label = Object.keys(report_dates)
+            label = Object.keys(report_dates)
             for (var i in label){
                 var t = label[i].split('-')
                 label[i] = t[2]+'-'+t[1]+'-'+t[0]

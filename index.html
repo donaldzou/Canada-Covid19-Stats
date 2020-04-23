@@ -40,11 +40,11 @@
         </div>
     </nav>
 
-    
+
     <div class="tab container-fluid main tab">
         <div id="nation_map" class='map'></div>
         <div class="row">
-            <div class="col-sm-3">  
+            <div class="col-sm-3">
                 <div class="card text-white bg-dark mb-3 ">
                     <div class="card-header">Total Cases</div>
                     <div class="card-body">
@@ -105,7 +105,7 @@
 
 
             <div class="col-sm-9">
-                
+
                 <div class="card text-white bg-dark mb-3 main_card">
                     <div class="card-header">Chart | Reported Case</div>
                     <div class="card-body myChartDiv">
@@ -114,7 +114,7 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-        
+
                     </div>
                 </div>
                 <div class="card text-white bg-dark mb-3 main_card">
@@ -160,7 +160,8 @@
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" id="get_province" type="button">
-                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
                             Search</button>
                     </div>
                 </div>
@@ -178,19 +179,30 @@
                     <div class="card-body">
                         <table class="table table-dark table-sm">
                             <thead>
-                              <tr>
-                                <th scope="col">Health Region</th>
-                                <th scope="col"># of Case</th>
-                              </tr>
+                                <tr>
+                                    <th scope="col">Health Region</th>
+                                    <th scope="col"># of Case</th>
+                                </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
-                          </table>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-sm-8">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header">Chart | Reported Case</div>
+                    <div class="card-body region_chart">
+                        <div class="text-center spinner-loader">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <canvas id="regionChart" width="500" height="300"></canvas>
+                    </div>
+                </div>
                 <div class="card text-white bg-dark mb-3 age-table">
                     <div class="card-header">
                         Chart | Canada Reported Cases Age Cumulative
@@ -201,7 +213,7 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                         
+
                     </div>
                 </div>
                 <div class="card text-white bg-dark mb-3 gender-table">
@@ -214,7 +226,6 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        <p class="graph_note" style="text-align: right; font-size:10px"></p>
                     </div>
                 </div>
             </div>
@@ -237,4 +248,5 @@
 <script src="custom.js"></script>
 <script src='cases.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+
 </html>
