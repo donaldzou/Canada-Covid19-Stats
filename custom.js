@@ -18,6 +18,7 @@ var today_Death = 0;
 var temp_l = {}
 var temp_percent = {}
 var label;
+var travel_history = {}
 prov_geocode = {
     "Ontario": {"lat": 43.6487, "lon": -79.38545},
     "BC": {"lat": 48.42855, "lon": -123.36445},
@@ -166,6 +167,19 @@ function getCases() {
                     else{
                         gender[current.sex]++;
                     }
+                    if (travel_history[current.travel_history_country] ==  undefined){
+                        var temp = current.travel_history_country.split(', ')
+                        for (var n in temp){
+                            travel_history[temp[n]] = 1;
+                        }
+                        
+                    }
+                    else{
+                        var temp = current.travel_history_country.split(', ')
+                        for (var n in temp){
+                            travel_history[temp[n]]++;
+                        }
+                    }
 
 
                 }
@@ -245,7 +259,7 @@ function getCases() {
                 $(".myChartDiv").append('<canvas id="myChart" width="500" height="800"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
-            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
+            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="500"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';

@@ -17,6 +17,14 @@ var region_chart;
 
 function cases() {
     if ($('.cases_link').hasClass("active") == false) {
+        if ($(".cases").hasClass('loaded')){
+            $(".nav-link").removeClass("active");
+            $(".cases_link").addClass("active");
+            $(".tab").fadeOut()
+            $(".cases").fadeIn()
+        }
+        else{
+        $(".cases").addClass("loaded")
         $.ajax({
             type: "GET",
             url: "https://raw.githubusercontent.com/sitrucp/canada_covid_health_regions/master/health_regions_lookup.csv",
@@ -48,6 +56,26 @@ function cases() {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w'
         }).addTo(mymap);
+        $.ajax({
+            type: "GET",
+            url: "https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv",
+            dataType: "text",
+            async: false,
+            success: function (data) {
+                var temp = $.csv.toObjects(data)
+                for (var n in temp){
+                    if (region_data[temp[n]['province']] == undefined){
+                        region_data[temp[n]['province']] = {}
+                    }
+                    if (region_data[temp[n]['province']][temp[n]['health_region']] == undefined){
+                        region_data[temp[n]['province']][temp[n]['health_region']] = {}
+                    }
+                    region_data[temp[n]['province']][temp[n]['health_region']][temp[n]['date_report']] = temp[n]['cumulative_cases']
+                    
+                }
+                
+            }
+        })
         load_age_graph();
         load_gender_graph();
         load_region_graph()
@@ -55,6 +83,7 @@ function cases() {
             load_map()
         }, 500)
     }
+}
 }
 
 function load_age_graph() {
@@ -357,6 +386,7 @@ function load_map() {
 }
 
 
+
 function getColor(n) {
     return n > 3000 ? '#B90000'
         : n > 2000 ? '#FF0000'
@@ -382,26 +412,7 @@ function load_table() {
 }
 
 function load_region_graph(){
-    $.ajax({
-        type: "GET",
-        url: "https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv",
-        dataType: "text",
-        async: false,
-        success: function (data) {
-            var temp = $.csv.toObjects(data)
-            for (var n in temp){
-                if (region_data[temp[n]['province']] == undefined){
-                    region_data[temp[n]['province']] = {}
-                }
-                if (region_data[temp[n]['province']][temp[n]['health_region']] == undefined){
-                    region_data[temp[n]['province']][temp[n]['health_region']] = {}
-                }
-                region_data[temp[n]['province']][temp[n]['health_region']][temp[n]['date_report']] = temp[n]['cumulative_cases']
-                
-            }
-            
-        }
-    })
+    
 
     region_dataset = province_dataset
     region_dataset.shift()
@@ -459,7 +470,7 @@ function load_region_graph(){
 function update_region_graph(){
     if ($("#province-select").val() == 'Canada'){
         region_chart.data.labels = label
-        region_chart.data.datasets = region_dataset
+        region_chart.data.datasets = province_dataset
         region_chart.update();
     } 
     else{

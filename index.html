@@ -32,6 +32,7 @@
             <ul class="navbar-nav mr-auto">
                 <a class="nav-item nav-link active" href="index.html">Overview<span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link cases_link" href="#cases" onclick="cases()">Cases</a>
+                <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History</a>
             </ul>
             <div class="spinner-grow spinner-grow-sm text-danger" role="status">
                 <span class="sr-only"></span>
@@ -42,13 +43,13 @@
 
 
     <div class="tab container-fluid main tab">
-        <div id="nation_map" class='map'></div>
+        
         <div class="row">
             <div class="col-sm-3">
                 <div class="card text-white bg-dark mb-3 ">
                     <div class="card-header">Total Cases</div>
                     <div class="card-body">
-                        <h1 class="card-title totalCases"></h1>
+                        <h3 class="card-title totalCases"></h3>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -62,7 +63,7 @@
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">Total Death</div>
                     <div class="card-body">
-                        <h1 class="card-title totalDeath"></h1>
+                        <h3 class="card-title totalDeath"></h3>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -76,7 +77,7 @@
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">Total Recovered</div>
                     <div class="card-body">
-                        <h1 class="card-title totalRecov"></h1>
+                        <h3 class="card-title totalRecov"></h3>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -90,7 +91,7 @@
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">Total Tested</div>
                     <div class="card-body">
-                        <h1 class="card-title totalTest"></h1>
+                        <h3 class="card-title totalTest"></h3>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -105,7 +106,7 @@
 
 
             <div class="col-sm-9">
-
+                <div id="nation_map" class='map'></div>
                 <div class="card text-white bg-dark mb-3 main_card">
                     <div class="card-header">Chart | Reported Case</div>
                     <div class="card-body myChartDiv">
@@ -150,10 +151,10 @@
         </div>
     </div>
 
-    <div class='tab container-fluid cases'>
+    <div class="tab container-fluid cases">
         <div id="mapid" class="cases_mod map"></div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="input-group dropdown-cases">
                     <select class="custom-select" id="province-select" aria-label="Example select with button addon">
                         <option value="Canada" selected>Canada</option>
@@ -185,13 +186,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-9">
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">Chart | Reported Case</div>
                     <div class="card-body region_chart">
@@ -232,6 +232,37 @@
         </div>
     </div>
 
+    <div class='tab container-fluid travel'>
+        
+        <div class='row'>
+            <div class="col-sm-4">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header">
+                        Table | Travel History
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-sm">
+                            <thead>
+                              <tr>
+                                <th scope="col">Country/City</th>
+                                <th scope="col"># of Case</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                
+            </div>
+            <div class='col-sm-8'>
+                <div class='map t_map' id="travel_map">
+            </div>
+        </div>
+        
+    </div>
+
 
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -245,8 +276,9 @@
 <script src="jquery.csv.min.js"></script>
 <script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
 <script src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <script src="custom.js"></script>
 <script src='cases.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src='travel.js'></script>
 
 </html>
