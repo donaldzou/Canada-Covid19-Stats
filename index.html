@@ -22,6 +22,7 @@
 </head>
 
 <body>
+    
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Canada COVID-19 Stats</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -221,11 +222,7 @@
                         Chart | Canada Reported Cases Gender Cumulative
                     </div>
                     <div class="card-body">
-                        <div class="text-center spinner-cases">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -233,9 +230,17 @@
     </div>
 
     <div class='tab container-fluid travel'>
+        <div class="text-center spinner-cases">
+            <div class="spinner-border travel_map_spinner" role="status" style='color:white;'>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div>
+            
+            <div class='map t_map' id="travel_map"></div>
+        </div>
         
-        <div class='row'>
-            <div class="col-sm-4">
+        
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">
                         Table | Travel History
@@ -250,16 +255,19 @@
                               </tr>
                             </thead>
                             <tbody>
+                                
                             </tbody>
                           </table>
+                          <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status" style='color:white;'>
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-            </div>
-            <div class='col-sm-8'>
-                <div class='map t_map' id="travel_map">
-            </div>
-        </div>
+           
+        
         
     </div>
 

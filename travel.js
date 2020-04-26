@@ -5,6 +5,7 @@ function travel() {
         $(".travel_link").addClass("active");
         $(".tab").fadeOut()
         $(".travel").fadeIn();
+        travel_map.invalidateSize();
     }
     else {
         $(".travel").addClass("loaded")
@@ -12,9 +13,6 @@ function travel() {
         $(".travel_link").addClass("active");
         $(".tab").fadeOut()
         $(".travel").fadeIn();
-
-
-
 
         travel_map = L.map('travel_map').setView([20.685, 15.118], 2);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -71,6 +69,10 @@ function load_travel() {
             }
         })
     }
+    
+    $(".spinner-cases").fadeOut();
+    $(".t_map").css('opacity',1);
     travel_map.invalidateSize();
+    
 
 }

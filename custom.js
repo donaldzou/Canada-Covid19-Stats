@@ -18,7 +18,9 @@ var today_Death = 0;
 var temp_l = {}
 var temp_percent = {}
 var label;
+var main_chart;
 var travel_history = {}
+var graph_data = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
 prov_geocode = {
     "Ontario": {"lat": 43.6487, "lon": -79.38545},
     "BC": {"lat": 48.42855, "lon": -123.36445},
@@ -259,7 +261,7 @@ function getCases() {
                 $(".myChartDiv").append('<canvas id="myChart" width="500" height="800"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
-            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="500"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
+            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="200"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
@@ -269,7 +271,7 @@ function getCases() {
                 label[i] = t[2]+'-'+t[1]+'-'+t[0]
             }
             label.sort()
-            let myChart = new Chart(ctx, {
+            main_chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: label,
@@ -465,7 +467,6 @@ function getDead() {
                 }
                 var temp_html = '<tr><th scope="row">'+num+'</th><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+thousands_separators(case_today)+'</td><td class="table_province_new_cases">'+thousands_separators(case_new)+'</td><td class="table_province_new_cases">'+death_today+'</td><td class="table_province_new_cases">'+death_new+'</td></td><td class="table_province_new_cases">'+recov_today_province+'</td></td><td class="table_province_new_cases">'+recov_new_province+'</td></td><td class="table_province_new_cases">'+tested_today+'</td></td><td class="table_province_new_cases">'+tested_new+'</td></tr>'
                 custom_data[current_province_name] = {'today':case_today,'new':case_new}
-                
                 $(".table_body").append(temp_html)
             }
         }

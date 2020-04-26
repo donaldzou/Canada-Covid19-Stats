@@ -113,5 +113,19 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .t_map{
-    height: 600px;
+    height: 450px;
+    position: sticky !important;
+    transition: ease-in-out 0.3s;  
+    opacity: 0.3; 
+}
+
+.travel_map_spinner{
+    color: white;
+    position: absolute;
+    z-index: 1000;
+    margin-top: 200px;
+}
+
+.main{
+    padding-top: 20px;
 }
