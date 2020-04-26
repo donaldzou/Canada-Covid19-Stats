@@ -5,9 +5,14 @@ function travel() {
         $(".travel_link").addClass("active");
         $(".tab").fadeOut()
         $(".travel").fadeIn();
-        travel_map.invalidateSize();
+        close_button()
+        setTimeout(function(){
+            travel_map.invalidateSize();
+        },300)
+        
     }
     else {
+        $(".spinner-cases").fadeIn()
         $(".travel").addClass("loaded")
         $(".nav-link").removeClass("active");
         $(".travel_link").addClass("active");
@@ -72,6 +77,7 @@ function load_travel() {
     
     $(".spinner-cases").fadeOut();
     $(".t_map").css('opacity',1);
+    close_button();
     travel_map.invalidateSize();
     
 

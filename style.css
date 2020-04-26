@@ -65,7 +65,7 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .map{
-    height: 500px;
+    height: 450px;
     margin-bottom: 20px;
     border-radius: 0.25rem;
     transition: ease-in-out 0.3s;
@@ -73,7 +73,7 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 
 #nation_map{
     display: none;
-    height: 500px;
+    height: 450px;
     margin-bottom: 20px;
     border-radius: 0.25rem;
 }
@@ -126,6 +126,3 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     margin-top: 200px;
 }
 
-.main{
-    padding-top: 20px;
-}
