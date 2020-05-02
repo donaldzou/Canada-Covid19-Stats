@@ -65,15 +65,21 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .map{
-    height: 450px;
+    height: 70vh;
     margin-bottom: 20px;
     border-radius: 0.25rem;
     transition: ease-in-out 0.3s;
 }
 
+@media only screen and (max-width: 768px) {
+    .map{
+        height: 450px !important;
+    }
+}
+
 #nation_map{
     display: none;
-    height: 450px;
+    height: 100%;
     margin-bottom: 20px;
     border-radius: 0.25rem;
 }
@@ -126,3 +132,25 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     margin-top: 200px;
 }
 
+.footer{
+    /* height:60px; */
+    margin-top: 20px;
+    width: 100%;
+    background-color: #343a40;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.footer p{
+    margin-bottom: 0;
+}
+.main .col-sm-3 .card-header{
+    text-align: center;
+}
+.card-body{
+    text-align: center;
+}
+
+.card-body p{
+    margin:0;
+}
