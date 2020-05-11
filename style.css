@@ -71,18 +71,38 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     transition: ease-in-out 0.3s;
 }
 
+#nation_map{
+    display: none;
+    height: 400px;
+    margin-bottom: 0px;
+    border-radius: 0.25rem;
+}
+
+.total-cases{
+    margin-bottom: 1rem;
+}
+
 @media only screen and (max-width: 768px) {
     .map{
         height: 450px !important;
     }
 }
 
-#nation_map{
-    display: none;
-    height: 100%;
-    margin-bottom: 20px;
-    border-radius: 0.25rem;
+@media only screen and (min-width: 768px) {
+    .total-cases{
+        height: 500px;
+        margin-bottom: 0;
+    }
+
+    .total-cases .card-body{
+        padding-top: 30%;
+    }
+    #nation_map{
+        height: 100%;
+    }
 }
+
+
 
 .map_body{
     padding: 0;
@@ -97,12 +117,17 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     display: none;
 }
 
-.fas{
-    float: right;
+.fa, .fab, .fad, .fal, .far, .fas{
+    /* float: right; */
     padding: 4px;
+    
+}
+
+.footer .fas{
     cursor: pointer;
     transition: cubic-bezier(1, -0.71, 0, 1.36) 0.5s;
 }
+
 
 .card-header p{
     position:absolute;
@@ -154,3 +179,8 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 .card-body p{
     margin:0;
 }
+
+#death_map{
+    display: none;
+}
+

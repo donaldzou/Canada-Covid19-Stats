@@ -2,7 +2,7 @@ var caseDict = {"cases":[],"count":{}}
 var report_dates = {}
 var death_report = {}
 var report_country_amount = []
-var deathDict = {"cases":[]}
+var deathDict = {"cases":[],'age':{},'gender':{}}
 var death_report_dates = {}
 var recovDict = {}
 var testDict = {}
@@ -22,19 +22,19 @@ var main_chart;
 var travel_history = {}
 var graph_data = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
 prov_geocode = {
-    "Ontario": {"lat": 43.6487, "lon": -79.38545},
-    "BC": {"lat": 48.42855, "lon": -123.36445},
-    "Quebec": {"lat": 46.81274, "lon": -71.21931},
-    "Alberta": {"lat": 53.54624, "lon": -113.49037},
-    "Saskatchewan": {"lat": 50.44826, "lon": -104.59517},
-    "Manitoba": {"lat": 49.89953, "lon": -97.14113},
-    "New Brunswick": {"lat": 45.96063, "lon": -66.63911},
-    "PEI": {"lat": 46.2366, "lon": -63.12816},
-    "NL": {"lat": 47.56083, "lon": -52.71219},
-    "Nova Scotia": {"lat": 44.64549, "lon": -63.57655},
-    "NWT": {"lat": 62.45446, "lon": -114.37094},
-    "Yukon": {"lat": 60.72086, "lon": -135.05323},
-    "Nunavut": {"lat": 63.75133, "lon": -68.52043}
+    "Ontario": {"lat": 49.919, "lon": -84.737},
+    "BC": {"lat": 54.536, "lon": -126.557},
+    "Quebec": {"lat": 54.729, "lon": -68.413},
+    "Alberta": {"lat": 54.872, "lon": -115.003},
+    "Saskatchewan": {"lat": 54.873, "lon": -105.684},
+    "Manitoba": {"lat": 54.872, "lon": -95.485},
+    "New Brunswick": {"lat": 46.528, "lon": -66.378},
+    "PEI": {"lat": 46.514, "lon": -63.202},
+    "NL": {"lat": 54.019, "lon": -60.18},
+    "Nova Scotia": {"lat": 45.347, "lon": -63.043},
+    "NWT": {"lat": 65.736, "lon": -118.667},
+    "Yukon": {"lat": 65.260, "lon": -132.406},
+    "Nunavut": {"lat": 73.818, "lon": -90.099}
 }
 var recov_today = 0;
 var recov_yesterday = 0;
@@ -60,6 +60,11 @@ var temp_list = [];
 
 var mymap;
 
+
+var geo_code = {}
+var geo_temp;
+
+
 province_dataset = [
     {
         label: 'Canada',
@@ -72,6 +77,7 @@ province_dataset = [
 function main(){
     $(".tab").hide();
     $(".main").fadeIn();
+    
 }
 
 function color(amount){
@@ -573,6 +579,21 @@ fetch(url)
         update_time_split[2] = update_time_split[2].split(" ")
         update_time_split = update_time_split[2][0] + "-" + update_time_split[1] + "-" + update_time_split[0]
         getCases();
+        $.ajax({
+            type: "GET",
+            url: "https://raw.githubusercontent.com/sitrucp/canada_covid_health_regions/master/health_regions_lookup.csv",
+            dataType: "text",
+            success: function (data) {
+                geo_temp = $.csv.toObjects(data)
+                for (var n in geo_temp) {
+                    if (geo_code[geo_temp[n]['province']] == undefined) {
+                        geo_code[geo_temp[n]['province']] = {}
+                    }
+                    geo_code[geo_temp[n]['province']][geo_temp[n]['statscan_arcgis_health_region']] = geo_temp[n]['authority_report_health_region']
+                }
+            }
+        });
+        
         
     });
   });
@@ -583,44 +604,3 @@ $(document).ready(function(){
     $(".tab").hide()
     main();
 })
-
-
-
-// Changes XML to JSON
-function xmlToJson(xml) {
-	
-	// Create the return object
-	var obj = {};
-
-	if (xml.nodeType == 1) { // element
-		// do attributes
-		if (xml.attributes.length > 0) {
-		obj["@attributes"] = {};
-			for (var j = 0; j < xml.attributes.length; j++) {
-				var attribute = xml.attributes.item(j);
-				obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-			}
-		}
-	} else if (xml.nodeType == 3) { // text
-		obj = xml.nodeValue;
-	}
-
-	// do children
-	if (xml.hasChildNodes()) {
-		for(var i = 0; i < xml.childNodes.length; i++) {
-			var item = xml.childNodes.item(i);
-			var nodeName = item.nodeName;
-			if (typeof(obj[nodeName]) == "undefined") {
-				obj[nodeName] = xmlToJson(item);
-			} else {
-				if (typeof(obj[nodeName].push) == "undefined") {
-					var old = obj[nodeName];
-					obj[nodeName] = [];
-					obj[nodeName].push(old);
-				}
-				obj[nodeName].push(xmlToJson(item));
-			}
-		}
-	}
-	return obj;
-};

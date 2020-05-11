@@ -5,8 +5,7 @@ var local_geocode = {}
 var group_local = L.featureGroup();
 var age_chart;
 var gen_chart;
-var geo_code = {}
-var geo_temp;
+
 var screen_width = $(window).width()
 var region_dataset = [];
 var region_data = {};
@@ -17,73 +16,59 @@ var region_chart;
 
 function cases() {
     if ($('.cases_link').hasClass("active") == false) {
-        if ($(".cases").hasClass('loaded')){
+        if ($(".cases").hasClass('loaded')) {
             $(".nav-link").removeClass("active");
             $(".cases_link").addClass("active");
             $(".tab").fadeOut()
             $(".cases").fadeIn()
         }
-        else{
-        $(".cases").addClass("loaded")
-        $.ajax({
-            type: "GET",
-            url: "https://raw.githubusercontent.com/sitrucp/canada_covid_health_regions/master/health_regions_lookup.csv",
-            dataType: "text",
-            success: function (data) {
-                geo_temp = $.csv.toObjects(data)
-                for (var n in geo_temp) {
-                    if (geo_code[geo_temp[n]['province']] == undefined) {
-                        geo_code[geo_temp[n]['province']] = {}
-                    }
-                    geo_code[geo_temp[n]['province']][geo_temp[n]['statscan_arcgis_health_region']] = geo_temp[n]['authority_report_health_region']
-                }
+        else {
+            $(".cases").addClass("loaded")
+            $(".nav-link").removeClass("active");
+            $(".cases_link").addClass("active");
+            $(".tab").fadeOut()
+            $(".cases").fadeIn()
+            for (var a in province_list) {
+                $("#province-select").append('<option value="' + province_list[a] + '">' + province_list[a] + '</option>')
             }
-        })
-        $(".nav-link").removeClass("active");
-        $(".cases_link").addClass("active");
-        $(".tab").fadeOut()
-        $(".cases").fadeIn()
-        for (var a in province_list) {
-            $("#province-select").append('<option value="' + province_list[a] + '">' + province_list[a] + '</option>')
+            $(".cases_mod").hide()
+            mymap = L.map('mapid').setView([58.972, -97.486], 4);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/dark-v10',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w'
+            }).addTo(mymap);
+            $.ajax({
+                type: "GET",
+                url: "https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv",
+                dataType: "text",
+                async: false,
+                success: function (data) {
+                    var temp = $.csv.toObjects(data)
+                    for (var n in temp) {
+                        if (region_data[temp[n]['province']] == undefined) {
+                            region_data[temp[n]['province']] = {}
+                        }
+                        if (region_data[temp[n]['province']][temp[n]['health_region']] == undefined) {
+                            region_data[temp[n]['province']][temp[n]['health_region']] = {}
+                        }
+                        region_data[temp[n]['province']][temp[n]['health_region']][temp[n]['date_report']] = temp[n]['cumulative_cases']
+
+                    }
+
+                }
+            })
+            load_age_graph();
+            load_gender_graph();
+            load_region_graph()
+            setTimeout(function () {
+                load_map()
+            }, 500)
         }
-        $(".cases_mod").hide()
-        mymap = L.map('mapid').setView([58.972, -97.486], 4);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/dark-v10',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoiZG9uYWxkem91IiwiYSI6ImNrOHN1M2JrZTBjZGEzbnI0amhzNG13dTYifQ.uTvTibSyi2lvdrbT4ipj4w'
-        }).addTo(mymap);
-        $.ajax({
-            type: "GET",
-            url: "https://raw.githubusercontent.com/ishaberry/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv",
-            dataType: "text",
-            async: false,
-            success: function (data) {
-                var temp = $.csv.toObjects(data)
-                for (var n in temp){
-                    if (region_data[temp[n]['province']] == undefined){
-                        region_data[temp[n]['province']] = {}
-                    }
-                    if (region_data[temp[n]['province']][temp[n]['health_region']] == undefined){
-                        region_data[temp[n]['province']][temp[n]['health_region']] = {}
-                    }
-                    region_data[temp[n]['province']][temp[n]['health_region']][temp[n]['date_report']] = temp[n]['cumulative_cases']
-                    
-                }
-                
-            }
-        })
-        load_age_graph();
-        load_gender_graph();
-        load_region_graph()
-        setTimeout(function () {
-            load_map()
-        }, 500)
     }
-}
 }
 
 function load_age_graph() {
@@ -218,7 +203,7 @@ function load_gender_graph() {
             }]
         },
         options: {
-            
+
             scales: {
                 xAxes: [{
                     barPercentage: 0.5,
@@ -390,14 +375,14 @@ function load_map() {
 function getColor(n) {
     return n > 3000 ? '#B90000'
         : n > 2000 ? '#FF0000'
-        : n > 1000 ? '#FF4E00'
-        : n > 500 ? '#FF5E00'
-        : n > 250 ? '#FF8100'
-        : n > 100 ? '#FFAA00'
-        : n > 50 ? '#FFAA00'
-        : n > 10 ? '#FFAA00'
-        : n > -1 ? '#ffffff'
-        : '#ffffff';
+            : n > 1000 ? '#FF4E00'
+                : n > 500 ? '#FF5E00'
+                    : n > 250 ? '#FF8100'
+                        : n > 100 ? '#FFAA00'
+                            : n > 50 ? '#FFAA00'
+                                : n > 10 ? '#FFAA00'
+                                    : n > -1 ? '#ffffff'
+                                        : '#ffffff';
 }
 
 
@@ -411,8 +396,8 @@ function load_table() {
     }
 }
 
-function load_region_graph(){
-    
+function load_region_graph() {
+
 
     region_dataset = province_dataset
     region_dataset.shift()
@@ -427,28 +412,28 @@ function load_region_graph(){
         options: {
             scales: {
                 yAxes: [{
-                    gridLines:{
-                        color:'rgba(255,255,255,0.2)'
+                    gridLines: {
+                        color: 'rgba(255,255,255,0.2)'
                     },
                     ticks: {
                         beginAtZero: true,
                         fontColor: 'white'
                     },
-                    scaleLabel:{
+                    scaleLabel: {
                         display: true,
-                        labelString:"Cases"
+                        labelString: "Cases"
                     }
                 }],
-                xAxes: [{   
+                xAxes: [{
                     ticks: {
                         fontColor: "white"
                     },
-                    gridLines:{
-                        color:'rgba(255,255,255,0.2)'
+                    gridLines: {
+                        color: 'rgba(255,255,255,0.2)'
                     },
-                    scaleLabel:{
-                        display:true,
-                        labelString:"Dates"
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Dates"
                     }
                 }]
             },
@@ -457,43 +442,62 @@ function load_region_graph(){
                     // This more specific font property overrides the global property
                     fontColor: 'white'
                 }
-            },  
+            },
         }
     });
-    if ($("#province-select").val() == 'Canada'){
+    if ($("#province-select").val() == 'Canada') {
         region_chart.data.labels = label
         region_chart.data.datasets = region_dataset
         region_chart.update();
-    }  
+    }
 }
 
-function update_region_graph(){
-    if ($("#province-select").val() == 'Canada'){
+function update_region_graph() {
+    if ($("#province-select").val() == 'Canada') {
         region_chart.data.labels = label
         region_chart.data.datasets = province_dataset
         region_chart.update();
-    } 
-    else{
+    }
+    else {
         var region_label = Object.keys(region_data['Ontario']['Toronto'])
         region_dataset = []
-        var current_data = region_data[$("#province-select").val()]
 
-        for (var n in Object.keys(current_data)){
-            if (Object.keys(current_data)[n] != 'Not Reported'){
-                var current_region = current_data[Object.keys(current_data)[n]]
+        if (Object.keys(region_data).includes($("#province-select").val())) {
+            var current_data = region_data[$("#province-select").val()]
+            for (var n in Object.keys(current_data)) {
+                if (Object.keys(current_data)[n] != 'Not Reported') {
+                    var current_region = current_data[Object.keys(current_data)[n]]
+                    var region_temp = {
+                        label: Object.keys(current_data)[n],
+                        data: [],
+                        borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+                        fill: false
+                    }
+                    for (var a in Object.keys(current_region)) {
+                        region_temp.data.push(current_region[Object.keys(current_region)[a]])
+                    }
+                    region_dataset.push(region_temp)
+                }
+            }
+        }
+        else {
+            var current_data = region_data['Ontario']
+            if (Object.keys(current_data)[n] != 'Not Reported') {
+                var current_region = current_data[Object.keys(current_data)[0]]
                 var region_temp = {
-                    label: Object.keys(current_data)[n],
-                    data:[],
-                    borderColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+                    label: $("#province-select").val(),
+                    data: [],
+                    borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
                     fill: false
                 }
-                for (var a in Object.keys(current_region)){
-                    region_temp.data.push(current_region[Object.keys(current_region)[a]])
+                for (var a in Object.keys(current_region)) {
+                    region_temp.data.push(0)
                 }
                 region_dataset.push(region_temp)
             }
-            
+
         }
+
         region_chart.data.labels = region_label
         region_chart.data.datasets = region_dataset
         region_chart.update()
@@ -503,7 +507,8 @@ function update_region_graph(){
 $('#get_province').click(function () {
     $("#province_title").text($("#province-select").val())
     $(".map .card-header").text('Map | ' + $("#province-select").val() + ' Reported Cases')
-    $(".age-table .card-header").text('Map | ' + $("#province-select").val() + ' Reported Cases Age Cumulative')
+    $(".age-table .card-header").html('<i class="far fa-chart-bar"></i>Chart | ' + $("#province-select").val() + ' Reported Cases Age Cumulative')
+    $(".gender-table .card-header").html('<i class="far fa-chart-bar"></i>Chart | ' + $("#province-select").val() + ' Reported Cases Gender Cumulative')
     $(".province_total_case .totalCases").text(custom_data[$("#province-select").val()]['today'] + ' cases in ' + $("#province-select").val())
     $(".province_total_case .compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
     $("#search-spinner").css('display', 'inline-block');
