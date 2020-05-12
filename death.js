@@ -9,6 +9,15 @@ var prov_group = L.featureGroup();
 var region_group = L.featureGroup();
 var region_death = {};
 var screen_width = $(window).width()
+
+function removeData(chart) {
+    chart.data.labels = [];
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data = [];
+    });
+    chart.update();
+}
+
 function death(){
     if($('.death_link').hasClass('active') == false){
         if ($('.death').hasClass('loaded')){
@@ -283,11 +292,12 @@ function load_death_data(){
                     region_death[temp[n]['province']][temp[n]['health_region']][temp[n]['date_death_report']] = temp[n]['cumulative_deaths']
                 }
             }
+            for (var a in Object.keys(region_death)) {
+                $("#death-province-select").append('<option value="' + Object.keys(region_death)[a] + '">' + Object.keys(region_death)[a] + '</option>')
+            }
         }
     });
-    for (var a in Object.keys(region_death)) {
-        $("#death-province-select").append('<option value="' + Object.keys(region_death)[a] + '">' + Object.keys(region_death)[a] + '</option>')
-    }
+    
     
 }
 
@@ -316,46 +326,58 @@ function load_death_map(){
 }
 
 function update_death_map(){
-    $.ajax({
-        type: "GET",
-        url: "geo_data/" + $("#death-province-select").val() + '.json',
-        dataType: "text",
-        success: function (response) {
-            var temp_geo = JSON.parse(response)
-            for (var n in temp_geo["features"]) {
-                var current_name = temp_geo["features"][n]["properties"]["ENG_LABEL"]
-                var current_prov = $("#death-province-select").val()
-                var local_name = geo_code[$("#death-province-select").val()][current_name]
-                if (Object.keys(region_death[current_prov]).includes(local_name)){
-                    var last_day = Object.keys(region_death[current_prov][local_name])[Object.keys(region_death[current_prov][local_name]).length -1]
-                    temp_geo["features"][n]["properties"]["AMOUNT"] = region_death[current_prov][local_name][last_day].toString()
-                    temp_geo["features"][n]["properties"]["AMOUNT_INT"] = region_death[current_prov][local_name][last_day]
-                    temp_geo["features"][n]["properties"]["NAME"] = local_name 
+    if ($("#death-province-select").val() != "Canada"){
+        death_map.removeLayer(region_group)
+        region_group = L.featureGroup();
+        $.ajax({
+            type: "GET",
+            url: "geo_data/" + $("#death-province-select").val() + '.json',
+            dataType: "text",
+            success: function (response) {
+                var temp_geo = JSON.parse(response)
+                for (var n in temp_geo["features"]) {
+                    var current_name = temp_geo["features"][n]["properties"]["ENG_LABEL"]
+                    var current_prov = $("#death-province-select").val()
+                    var local_name = geo_code[$("#death-province-select").val()][current_name]
+                    if (Object.keys(region_death[current_prov]).includes(local_name)){
+                        var last_day = Object.keys(region_death[current_prov][local_name])[Object.keys(region_death[current_prov][local_name]).length -1]
+                        temp_geo["features"][n]["properties"]["AMOUNT"] = region_death[current_prov][local_name][last_day].toString()
+                        temp_geo["features"][n]["properties"]["AMOUNT_INT"] = region_death[current_prov][local_name][last_day]
+                        temp_geo["features"][n]["properties"]["NAME"] = local_name 
+                    }
+                    else{
+                        temp_geo["features"][n]["properties"]["AMOUNT"] = '0'
+                        temp_geo["features"][n]["properties"]["AMOUNT_INT"] = 0
+                        temp_geo["features"][n]["properties"]["NAME"] = local_name 
+                    }
                 }
-                else{
-                    temp_geo["features"][n]["properties"]["AMOUNT"] = '0'
-                    temp_geo["features"][n]["properties"]["AMOUNT_INT"] = 0
-                    temp_geo["features"][n]["properties"]["NAME"] = local_name 
-                }
+                L.geoJSON(temp_geo, {
+                    style: function (feature) {
+                        return {
+                            color: getColor(feature.properties.AMOUNT_INT),
+                            fillOpacity: 0.3,
+                            weight: 1
+                        };
+                    }
+                }).bindPopup(function (layer) {
+                    var str = "<h4>" + layer.feature.properties.NAME + "</h4><h6>" + layer.feature.properties.AMOUNT + " deaths</h6>"
+                    return str;
+                }).addTo(region_group);
+                death_map.removeLayer(prov_group)
+                death_map.addLayer(region_group)
+                death_map.setView(new L.LatLng(prov_geocode[$("#death-province-select").val()]['lat'], prov_geocode[$("#death-province-select").val()]['lon']), 5);
+                $(".map").css("opacity", 1)
             }
-            L.geoJSON(temp_geo, {
-                style: function (feature) {
-                    return {
-                        color: getColor(feature.properties.AMOUNT_INT),
-                        fillOpacity: 0.3,
-                        weight: 1
-                    };
-                }
-            }).bindPopup(function (layer) {
-                var str = "<h4>" + layer.feature.properties.NAME + "</h4><h6>" + layer.feature.properties.AMOUNT + " cases</h6>"
-                return str;
-            }).addTo(region_group);
-            death_map.removeLayer(prov_group)
-            death_map.addLayer(region_group)
-            death_map.setView(new L.LatLng(prov_geocode[$("#death-province-select").val()]['lat'], prov_geocode[$("#death-province-select").val()]['lon']), 5);
-
-        }
-    });
+        });
+    }
+    else{
+        death_map.removeLayer(region_group)
+        death_map.addLayer(prov_group)
+        death_map.setView([58.972, -97.486], 4);
+        $(".map").css("opacity", 1)
+    }
+    
+    
 }
 
 
@@ -409,8 +431,97 @@ function load_death_gender_chart(){
     }
 }
 
+function update_death_chart(){
+    if ($("#death-province-select").val() == 'Canada'){
+        death_case_chart.data.labels = Object.keys(prov_death.Alberta)
+        death_case_chart.data.datasets = death_case_dataset
+        death_case_chart.update()
+    }
+    else{
+        death_case_chart.data.labels = []
+        death_case_chart.data.datasets = []
+        var data_label = Object.keys(region_death["Ontario"]["Toronto"])
+        for (var n in Object.keys(region_death[$("#death-province-select").val()])){
+            var current_region = Object.keys(region_death[$("#death-province-select").val()])[n]
+            if (current_region != "Not Reported"){
+                var region_temp = {
+                    label: current_region,
+                    data: [],
+                    borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+                    fill: false
+                }
+                for(var n in Object.keys(region_death[$("#death-province-select").val()][current_region])){
+                    var dates = Object.keys(region_death[$("#death-province-select").val()][current_region])[n]
+                    region_temp.data.push((region_death[$("#death-province-select").val()][current_region])[dates])
+                }
+            }
+            death_case_chart.data.datasets.push(region_temp)
+
+
+        }
+        death_case_chart.data.labels = data_label
+        death_case_chart.update()
+    }
+}
+
+function update_death_age_chart(){
+    if ($("#death-province-select").val() == 'Canada'){
+        removeData(death_age_chart);
+        load_death_age_chart();
+    }
+    else{
+        removeData(death_age_chart);
+        var data_label =  Object.keys(deathDict.prov_age[$("#death-province-select").val()]).sort()
+        var data = []
+        if (data_label.includes("Not Reported")){
+            $(".death_age .graph_note").text("*"+ deathDict.prov_age[$("#death-province-select").val()]['Not Reported']+ ' cases not reported')
+            data_label.splice(data_label.indexOf("Not Reported"), 1)
+        }
+        else{
+            $(".death_age .graph_note").text("")
+        }
+        for(var n in data_label){
+            var current_age = data_label[n]
+            data.push(deathDict.prov_age[$("#death-province-select").val()][current_age])
+       }
+       death_age_chart.data.labels = data_label
+       death_age_chart.data.datasets[0]['data'] = data
+       death_age_chart.update()
+    }
+}
+
+function update_death_gender_chart(){
+    if ($("#death-province-select").val() == 'Canada'){
+        removeData(death_gender_chart);
+        load_death_gender_chart();
+    }
+    else{
+        removeData(death_gender_chart);
+        var data_label =  Object.keys(deathDict.prov_gender[$("#death-province-select").val()]).sort();
+        var datas = []
+        if (data_label.includes("Not Reported")){
+            $(".death_gender .graph_note").text("*"+ deathDict.prov_gender[$("#death-province-select").val()]['Not Reported']+ ' cases not reported')
+            data_label.splice(data_label.indexOf("Not Reported"), 1)
+        }
+        else{
+            $(".death_gender .graph_note").text("")
+        }
+        for(var n in data_label){
+            var current_gender = data_label[n]
+            datas.push(deathDict.prov_gender[$("#death-province-select").val()][current_gender])
+        }
+        death_gender_chart.data.labels = data_label
+        death_gender_chart.data.datasets[0]['data'] = datas
+        death_gender_chart.update()
+    }
+}
+
 
 
 $('#death_get_province').click(function(){
     update_death_map();
+    $(".map").css("opacity", 0.3);
+    update_death_chart();
+    update_death_age_chart();
+    update_death_gender_chart();
 })

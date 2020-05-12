@@ -2,7 +2,7 @@ var caseDict = {"cases":[],"count":{}}
 var report_dates = {}
 var death_report = {}
 var report_country_amount = []
-var deathDict = {"cases":[],'age':{},'gender':{}}
+var deathDict = {"cases":[],'age':{},'gender':{},"prov_gender":{},"prov_age":{}}
 var death_report_dates = {}
 var recovDict = {}
 var testDict = {}
@@ -389,6 +389,26 @@ function getDead() {
                     }
                     else{
                         death_report_dates[date_death]['count']++
+                    }
+                    //Prov death age
+                    if (deathDict.prov_gender[current.province] == undefined){
+                        deathDict.prov_gender[current.province] = {}
+                    }
+                    if (deathDict.prov_gender[current.province][current.sex] ==undefined){
+                        deathDict.prov_gender[current.province][current.sex] = 1
+                    }
+                    else{
+                        deathDict.prov_gender[current.province][current.sex]++
+                    }
+                    //Prov death gender
+                    if (deathDict.prov_age[current.province] == undefined){
+                        deathDict.prov_age[current.province] = {}
+                    }
+                    if (deathDict.prov_age[current.province][current.age] == undefined){
+                        deathDict.prov_age[current.province][current.age] = 1
+                    }
+                    else{
+                        deathDict.prov_age[current.province][current.age]++
                     }
                     
                 }
