@@ -36,9 +36,12 @@
                         class="fas fa-viruses"></i></a>
                 <a class="nav-item nav-link death_link" href="#motality" onclick="death()">Mortality<i
                         class="fas fa-heart-broken"></i></a>
-                <a class="nav-item nav-link recov_link" href="#recovered" data-toggle="modal" data-target="#staticBackdrop">Recovered<i class="fas fa-procedures"></i></a>
-                <a class="nav-item nav-link test_link" href="#tested" data-toggle="modal" data-target="#staticBackdrop">Tested<i class="fas fa-syringe"></i></i></a>
-                <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History<i class="fas fa-plane-departure"></i></a>
+                <a class="nav-item nav-link recov_link" href="#recovered" data-toggle="modal"
+                    data-target="#staticBackdrop">Recovered<i class="fas fa-procedures"></i></a>
+                <a class="nav-item nav-link test_link" href="#tested" data-toggle="modal"
+                    data-target="#staticBackdrop">Tested<i class="fas fa-syringe"></i></i></a>
+                <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History<i
+                        class="fas fa-plane-departure"></i></a>
             </ul>
             <div class="spinner-grow spinner-grow-sm text-danger" role="status">
                 <span class="sr-only"></span>
@@ -86,7 +89,8 @@
             </div>
             <div class='col-sm'>
                 <div class="input-group dropdown-cases">
-                    <select class="custom-select province-selection" id="province-select" aria-label="Example select with button addon">
+                    <select class="custom-select province-selection" id="province-select"
+                        aria-label="Example select with button addon">
                         <option value="Canada" selected>Canada</option>
                     </select>
                     <div class="input-group-append">
@@ -98,13 +102,17 @@
                 </div>
             </div>
         </div>
-        
-      </nav>
+
+    </nav>
 
 
     <div class="tab container-fluid main tab">
 
         <div class="row" style="padding-bottom: 20px;">
+
+            <div class='col-sm-9'>
+                <div id="nation_map" class='map'></div>
+            </div>
             <div class="col-sm-3">
                 <div class="card text-white bg-dark total-cases">
                     <div class="card-header" style="text-align: center;">Total Cases</div>
@@ -118,63 +126,12 @@
                     </div>
                 </div>
             </div>
-            <div class='col-sm-9'>
-                <div id="nation_map" class='map'></div>
-            </div>
         </div>
 
 
 
 
         <div class="row">
-            <div class="col-sm-3">
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-heart-broken"></i>Total Death</i></div>
-                    <div class="card-body">
-                        <h5 class="card-title totalDeath"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_death"></p>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-procedures"></i>Total Recovered</div>
-                    <div class="card-body">
-                        <h5 class="card-title totalRecov"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_recov"></p>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-syringe"></i>Total Tested</div>
-                    <div class="card-body">
-                        <h5 class="card-title totalTest"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_test"></p>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="col-sm-9">
                 <div class="card text-white bg-dark mb-3 main_card line-chart">
                     <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Reported Case</div>
@@ -216,11 +173,84 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><i class="fas fa-heart-broken"></i>Total Death</i></div>
+                    <div class="card-body">
+                        <h5 class="card-title totalDeath"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <hr>
+                        <p class="card-text compare_yesterday_death"></p>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><i class="fas fa-procedures"></i>Total Recovered</div>
+                    <div class="card-body">
+                        <h5 class="card-title totalRecov"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <hr>
+                        <p class="card-text compare_yesterday_recov"></p>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><i class="fas fa-syringe"></i>Total Tested</div>
+                    <div class="card-body">
+                        <h5 class="card-title totalTest"></h5>
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <hr>
+                        <p class="card-text compare_yesterday_test"></p>
+                        <div class="spinner-border  text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><i class="fas fa-globe"></i>Global</div>
+                    <div class="card-body">
+                        <h5 id="TotalConfirmed"><span class="badge badge-warning ">Total Confirmed</span>
+                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <br>
+                        </h5>
+                        <hr>
+                        <h5 id="TotalDeaths"><span class="badge badge-warning ">Total Deaths</span>
+                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <br>
+                        </h5>
+                        <hr>
+                        <h5 id="TotalRecovered"><span class="badge badge-warning ">Total Recovered</span>
+                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <br>
+                        </h5>
+                        
+                        
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="tab container-fluid cases">
-       
+
         <div class="row">
             <div class="col-sm-9">
                 <div id="mapid" class="cases_mod map"></div>
@@ -232,7 +262,7 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="card text-white bg-dark mb-3 age-table bar-chart">
@@ -248,7 +278,7 @@
 
                     </div>
                 </div>
-                
+
             </div>
             <div class="col-sm-3">
                 <div class="card text-white bg-dark mb-3 province_total_case">
@@ -290,7 +320,7 @@
 
 
     <div class='tab container-fluid death'>
-       
+
         <div class='row'>
             <div class='col-sm-9'>
                 <div id='death_map' class='map'></div>
@@ -332,15 +362,15 @@
                     <div class="card-body">
                         <table class="table table-dark death_table table-sm">
                             <thead>
-                              <tr>
-                                <th scope="col">Province</th>
-                                <th scope="col">Cumulative Mortality</th>
-                              </tr>
+                                <tr>
+                                    <th scope="col">Province</th>
+                                    <th scope="col">Cumulative Mortality</th>
+                                </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
-                          </table>
+                        </table>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -433,24 +463,25 @@
         </div>
     </div>
 
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Sorry...</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Sorry...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    This is still under construction :) Come back later.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body">
-              This is still under construction :) Come back later.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"

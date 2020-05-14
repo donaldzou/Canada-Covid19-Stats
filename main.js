@@ -21,6 +21,7 @@ var label;
 var main_chart;
 var travel_history = {}
 var graph_data = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+var global;
 prov_geocode = {
     "Ontario": {"lat": 49.919, "lon": -84.737},
     "BC": {"lat": 54.536, "lon": -126.557},
@@ -488,14 +489,28 @@ function getDead() {
                         }
                     }
 
-                    death_today = thousands_separators(data_list[data_list.length - 1])
+                    death_today = data_list[data_list.length - 1]
                     death_new = thousands_separators(death_today - data_list[data_list.length - 2])
+                    death_today = thousands_separators(death_today)
 
                 }
                 var temp_html = '<tr><td class="table_province_name">'+current_province_name+'</td><td class="table_province_cases">'+thousands_separators(case_today)+'</td><td class="table_province_new_cases">'+thousands_separators(case_new)+'</td><td class="table_province_new_cases">'+thousands_separators(death_today)+'</td><td class="table_province_new_cases">'+thousands_separators(death_new)+'</td></td><td class="table_province_new_cases">'+thousands_separators(recov_today_province)+'</td></td><td class="table_province_new_cases">'+thousands_separators(recov_new_province)+'</td></td><td class="table_province_new_cases">'+thousands_separators(tested_today)+'</td></td><td class="table_province_new_cases">'+thousands_separators(tested_new)+'</td></tr>'
                 custom_data[current_province_name] = {'today':case_today,'new':case_new}
                 $(".table_body").append(temp_html)
             }
+            setTimeout(function () {
+                $.ajax({
+                    url      : "https://api.covid19api.com/summary",
+                    dataType : 'json',
+                    success  : function (data) {
+                      global = data;
+                      $("#TotalConfirmed").append(thousands_separators(global.Global.TotalConfirmed))
+                      $("#TotalDeaths").append(thousands_separators(global.Global.TotalDeaths))
+                      $("#TotalRecovered").append(thousands_separators(global.Global.TotalRecovered))
+                    }
+                });
+                    },300)
+           
         }
     }
     )
@@ -614,8 +629,6 @@ fetch(url)
                 }
             }
         });
-        
-        
     });
   });
 
