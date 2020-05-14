@@ -7,9 +7,12 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
  right:0;
 }
 
+.tab{
+    margin-top: 20px;
+}
+
 .navbar{
-    margin-bottom: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), -1px -20px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19)
 }
 .total{
     text-align: center;
@@ -44,7 +47,9 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .dropdown-cases {
-    margin-bottom:10px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
   }
 
 
@@ -184,3 +189,28 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
     display: none;
 }
 
+
+
+.search-bar{
+    display: none;
+    border-top: 2px solid #2a2d33;
+}
+
+.navbar h4{
+    margin-bottom: 0;
+    line-height: 30px;
+}
+
+h4 .badge{
+    width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    .search-bar h4{
+        margin-bottom: 10px;
+    }
+}
+
+/* .double_nav{
+    display: none;
+} */

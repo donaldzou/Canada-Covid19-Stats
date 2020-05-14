@@ -23,15 +23,26 @@ function death(){
         if ($('.death').hasClass('loaded')){
             $(".nav-link").removeClass("active");
             $(".death_link").addClass("active");
-            $(".tab").fadeOut()
+            $(".tab").fadeOut();
+            //
+            $(".double_nav").hide();
+            $(".death_nav").fadeIn();
+            //
             $(".death").fadeIn()
+            
         }
         else{
+            $(".totalDeath").text(total_Death+' Deaths')
             $(".death").addClass("loaded")
             $(".nav-link").removeClass("active");
             $(".death_link").addClass("active");
-            $(".tab").fadeOut()
+            $(".tab").fadeOut()            
             $(".death").fadeIn()
+            $(".search-bar").fadeIn();
+             //
+             $(".double_nav").hide();
+             $(".death_nav").fadeIn();
+             //
             load_death_data();
             
             death_map = L.map('death_map').setView([58.972, -97.486], 4);
@@ -53,7 +64,7 @@ function death(){
                 $(".death_case .card-body").append('<canvas id="death_case" width="500" height="700"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             else {
-                $(".death_case .card-body").append('<canvas id="death_case" width="500" height="200"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+                $(".death_case .card-body").append('<canvas id="death_case" width="500" height="300"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             var ctx = document.getElementById("death_case")
             death_case_chart = new Chart(ctx, {
@@ -199,10 +210,10 @@ function death(){
             }
             //Init gender chart
             if (screen_width <= 768) {
-                $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="400"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+                $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="500"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             else {
-                $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="200"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+                $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="600"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             var ctx = document.getElementById("death_gender_table");
             death_gender_chart = new Chart(ctx, {
@@ -327,6 +338,7 @@ function load_death_map(){
 
 function update_death_map(){
     if ($("#death-province-select").val() != "Canada"){
+        
         death_map.removeLayer(region_group)
         region_group = L.featureGroup();
         $.ajax({
@@ -334,6 +346,7 @@ function update_death_map(){
             url: "geo_data/" + $("#death-province-select").val() + '.json',
             dataType: "text",
             success: function (response) {
+                $(".death_table tbody").html('')
                 var temp_geo = JSON.parse(response)
                 for (var n in temp_geo["features"]) {
                     var current_name = temp_geo["features"][n]["properties"]["ENG_LABEL"]
@@ -344,11 +357,14 @@ function update_death_map(){
                         temp_geo["features"][n]["properties"]["AMOUNT"] = region_death[current_prov][local_name][last_day].toString()
                         temp_geo["features"][n]["properties"]["AMOUNT_INT"] = region_death[current_prov][local_name][last_day]
                         temp_geo["features"][n]["properties"]["NAME"] = local_name 
+                        $(".death_table tbody").append('<tr><th scope="row">'+local_name+'</th><td>'+region_death[current_prov][local_name][last_day]+'</td></tr>')
                     }
                     else{
                         temp_geo["features"][n]["properties"]["AMOUNT"] = '0'
                         temp_geo["features"][n]["properties"]["AMOUNT_INT"] = 0
-                        temp_geo["features"][n]["properties"]["NAME"] = local_name 
+                        temp_geo["features"][n]["properties"]["NAME"] = local_name
+                        $(".death_table tbody").append('<tr><th scope="row">'+local_name+'</th><td>0</td></tr>')
+
                     }
                 }
                 L.geoJSON(temp_geo, {
@@ -371,13 +387,16 @@ function update_death_map(){
         });
     }
     else{
+        $(".death_table tbody").html('')
+        load_death_table();
         death_map.removeLayer(region_group)
         death_map.addLayer(prov_group)
         death_map.setView([58.972, -97.486], 4);
-        $(".map").css("opacity", 1)
+        setTimeout(function(){
+            $(".map").css("opacity", 1)
+        },100)
+        
     }
-    
-    
 }
 
 
@@ -519,6 +538,16 @@ function update_death_gender_chart(){
 
 
 $('#death_get_province').click(function(){
+    if ($("#death-province-select").val() == 'Canada'){
+        $(".totalDeath").text(thousands_separators(total_Death));
+        $(".compare_yesterday_death").text(thousands_separators(today_Death)+" New deaths")
+    }
+    else{
+        var today = Object.keys(prov_death[$("#death-province-select").val()])[Object.keys(prov_death[$("#death-province-select").val()]).length -1]
+        var yesterday = Object.keys(prov_death[$("#death-province-select").val()])[Object.keys(prov_death[$("#death-province-select").val()]).length - 2]
+        $(".totalDeath").text(prov_death[$("#death-province-select").val()][today] + " Deaths in "+ $("#death-province-select").val())
+        $(".compare_yesterday_death").text(prov_death[$("#death-province-select").val()][today] - prov_death[$("#death-province-select").val()][yesterday] +" New Deaths")
+    }
     update_death_map();
     $(".map").css("opacity", 0.3);
     update_death_chart();

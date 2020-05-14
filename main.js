@@ -77,7 +77,8 @@ province_dataset = [
 function main(){
     $(".tab").hide();
     $(".main").fadeIn();
-    
+    $(".search-bar").hide()
+    $(".double_nav").hide()
 }
 
 function color(amount){

@@ -38,8 +38,7 @@
                         class="fas fa-heart-broken"></i></a>
                 <a class="nav-item nav-link recov_link" href="#recovered" data-toggle="modal" data-target="#staticBackdrop">Recovered<i class="fas fa-procedures"></i></a>
                 <a class="nav-item nav-link test_link" href="#tested" data-toggle="modal" data-target="#staticBackdrop">Tested<i class="fas fa-syringe"></i></i></a>
-                <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History<i
-                        class="fas fa-plane-departure"></i></a>
+                <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History<i class="fas fa-plane-departure"></i></a>
             </ul>
             <div class="spinner-grow spinner-grow-sm text-danger" role="status">
                 <span class="sr-only"></span>
@@ -48,10 +47,62 @@
             <span class="navbar-text "></span>
         </div>
     </nav>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark search-bar">
+        <div class='row death_nav double_nav'>
+            <div class='col-sm'>
+                <div class='row'>
+                    <div class='col-sm'>
+                        <h4 class=""><span class="badge badge-danger totalDeath"> Deaths</span></h4>
+                    </div>
+                    <div class='col-sm'>
+                        <h4 class=""><span class="badge badge-danger compare_yesterday_death"> New Deaths</span></h4>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm'>
+                <div class="input-group dropdown-cases death-select">
+                    <select class="custom-select province-selection" id="death-province-select">
+                        <option value="Canada" selected>Canada</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="death_get_province" type="button">
+                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
+                            Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row cases_nav double_nav'>
+            <div class='col-sm'>
+                <div class='row'>
+                    <div class='col-sm'>
+                        <h4 class=""><span class="badge badge-danger totalCases"> Deaths</span></h4>
+                    </div>
+                    <div class='col-sm'>
+                        <h4 class=""><span class="badge badge-danger compare_yesterday"> Deaths</span></h4>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm'>
+                <div class="input-group dropdown-cases">
+                    <select class="custom-select province-selection" id="province-select" aria-label="Example select with button addon">
+                        <option value="Canada" selected>Canada</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="get_province" type="button">
+                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
+                            Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+      </nav>
 
 
     <div class="tab container-fluid main tab">
-        
 
         <div class="row" style="padding-bottom: 20px;">
             <div class="col-sm-3">
@@ -169,20 +220,37 @@
     </div>
 
     <div class="tab container-fluid cases">
-        <div id="mapid" class="cases_mod map"></div>
+       
         <div class="row">
-            <div class="col-sm-3">
-                <div class="input-group dropdown-cases">
-                    <select class="custom-select province-selection" id="province-select" aria-label="Example select with button addon">
-                        <option value="Canada" selected>Canada</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="get_province" type="button">
-                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status"
-                                aria-hidden="true"></span>
-                            Search</button>
+            <div class="col-sm-9">
+                <div id="mapid" class="cases_mod map"></div>
+                <div class="card text-white bg-dark mb-3 line-chart">
+                    <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Reported Case</div>
+                    <div class="card-body region_chart">
+                        <div class="text-center spinner-loader">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
+                <div class="card text-white bg-dark mb-3 age-table bar-chart">
+                    <div class="card-header">
+                        <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Age Cumulative
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center spinner-cases">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-sm-3">
                 <div class="card text-white bg-dark mb-3 province_total_case">
                     <div class="card-body">
                         <h5 class="card-title totalCases"></h5>
@@ -207,32 +275,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="card text-white bg-dark mb-3 line-chart">
-                    <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Reported Case</div>
-                    <div class="card-body region_chart">
-                        <div class="text-center spinner-loader">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                        <canvas id="regionChart" width="500" height="300"></canvas>
-                    </div>
-                </div>
-                <div class="card text-white bg-dark mb-3 age-table bar-chart">
-                    <div class="card-header">
-                        <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Age Cumulative
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center spinner-cases">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <div class="card text-white bg-dark mb-3 gender-table bar-chart">
                     <div class="card-header">
                         <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Gender Cumulative
@@ -248,20 +290,28 @@
 
 
     <div class='tab container-fluid death'>
-        <div id='death_map' class='map'></div>
+       
         <div class='row'>
-            <div class='col-sm-3'>
-                <div class="input-group dropdown-cases">
-                    <select class="custom-select province-selection" id="death-province-select" aria-label="Example select with button addon">
-                        <option value="Canada" selected>Canada</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="death_get_province" type="button">
-                            <span id='search-spinner' class="spinner-border spinner-border-sm" role="status"
-                                aria-hidden="true"></span>
-                            Search</button>
+            <div class='col-sm-9'>
+                <div id='death_map' class='map'></div>
+                <div class='card text-white bg-dark mb-3 death_case line-chart'>
+                    <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Mortality Cumulative</div>
+                    <div class="card-body">
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
+                <div class='card text-white bg-dark mb-3 death_age bar-chart'>
+                    <div class="card-header"><i class="far fa-chart-bar"></i>Chart | Mortality Age Cumulative</div>
+                    <div class="card-body">
+                        <div class="spinner-border text-light spinner-loader" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-3'>
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-body">
                         <h5 class="card-title totalDeath"></h5>
@@ -291,24 +341,6 @@
                               
                             </tbody>
                           </table>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='col-sm-9'>
-                <div class='card text-white bg-dark mb-3 death_case line-chart'>
-                    <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Mortality Cumulative</div>
-                    <div class="card-body">
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class='card text-white bg-dark mb-3 death_age bar-chart'>
-                    <div class="card-header"><i class="far fa-chart-bar"></i>Chart | Mortality Age Cumulative</div>
-                    <div class="card-body">
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>

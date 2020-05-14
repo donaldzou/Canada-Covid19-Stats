@@ -21,13 +21,23 @@ function cases() {
             $(".cases_link").addClass("active");
             $(".tab").fadeOut()
             $(".cases").fadeIn()
+            //
+            $(".double_nav").hide();
+            $(".cases_nav").fadeIn();
+            //
         }
         else {
+            $(".totalCases").text(total_Case+' Cases')
             $(".cases").addClass("loaded")
             $(".nav-link").removeClass("active");
             $(".cases_link").addClass("active");
             $(".tab").fadeOut()
             $(".cases").fadeIn()
+            $(".search-bar").fadeIn();
+             //
+             $(".double_nav").hide();
+             $(".cases_nav").fadeIn();
+             //
             for (var a in province_list) {
                 $("#province-select").append('<option value="' + province_list[a] + '">' + province_list[a] + '</option>')
             }
@@ -185,10 +195,10 @@ function removeData(chart) {
 
 function load_gender_graph() {
     if (screen_width <= 768) {
-        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="400"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="500"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     else {
-        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="200"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="600"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     var ctx = document.getElementById("gender_chart");
     gen_chart = new Chart(ctx, {
@@ -203,7 +213,7 @@ function load_gender_graph() {
             }]
         },
         options: {
-
+            
             scales: {
                 xAxes: [{
                     barPercentage: 0.5,
@@ -397,7 +407,12 @@ function load_table() {
 }
 
 function load_region_graph() {
-
+ if (screen_width <= 768) {
+                $(".region_chart").append('<canvas id="regionChart" width="500" height="700"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+            }
+            else {
+                $(".region_chart").append('<canvas id="regionChart" width="500" height="300"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+            }
 
     region_dataset = province_dataset
     region_dataset.shift()
@@ -410,6 +425,7 @@ function load_region_graph() {
         },
         responsive: true,
         options: {
+            
             scales: {
                 yAxes: [{
                     gridLines: {
@@ -509,10 +525,10 @@ $('#get_province').click(function () {
     $(".map .card-header").text('Map | ' + $("#province-select").val() + ' Reported Cases')
     $(".age-table .card-header").html('<i class="far fa-chart-bar"></i>Chart | ' + $("#province-select").val() + ' Reported Cases Age Cumulative')
     $(".gender-table .card-header").html('<i class="far fa-chart-bar"></i>Chart | ' + $("#province-select").val() + ' Reported Cases Gender Cumulative')
-    $(".province_total_case .totalCases").text(custom_data[$("#province-select").val()]['today'] + ' cases in ' + $("#province-select").val())
-    $(".province_total_case .compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
+    $(".totalCases").text(custom_data[$("#province-select").val()]['today'] + ' cases in ' + $("#province-select").val())
+    $(".compare_yesterday").text(custom_data[$("#province-select").val()]['new'] + ' New cases')
     $("#search-spinner").css('display', 'inline-block');
-    $(".region_table .card-header").html('Table | ' + $("#province-select").val() + ' Health Regions Cases<i class="fas fa-times" aria-hidden="true"></i>')
+    $(".region_table .card-header").html('Table | ' + $("#province-select").val() + ' Health Regions Cases')
     close_button()
     update_region_graph()
     update_age_graph();
