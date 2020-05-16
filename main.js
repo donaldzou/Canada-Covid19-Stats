@@ -269,7 +269,7 @@ function getCases() {
                 $(".myChartDiv").append('<canvas id="myChart" width="500" height="800"></canvas><p style="text-align: right;font-size:10px">*Click province name can show/hide on the graph</p>')
 
             }
-            else{$(".myChartDiv").append('<canvas id="myChart" width="500" height="250"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
+            else{$(".myChartDiv").append('<canvas id="myChart"></canvas><p style="text-align: right; font-size:10px">*Click province name can show/hide on the graph</p>');
         }
             var ctx = document.getElementById("myChart");
             Chart.defaults.global.defaultFontColor = 'white';
@@ -285,7 +285,9 @@ function getCases() {
                     labels: label,
                     datasets: province_dataset
                 },
+                
                 options: {
+                    responsive:true,
                     scales: {
                         yAxes: [{
                             gridLines:{
@@ -325,12 +327,7 @@ function getCases() {
 
             //Initialize Map
             var width = $(window).width();
-            if (width <= 768){
-                var nation = L.map('nation_map').setView([57.133, -95.455], 3);
-            }
-            else{
-                var nation = L.map('nation_map').setView([57.133, -95.455], 4.3);
-            }
+            var nation = L.map('nation_map').setView([57.133, -95.455], 3);
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
@@ -347,7 +344,7 @@ function getCases() {
                         fillOpacity: 0.5,
                         radius: rad
                     }).addTo(group_national);
-                    circle.bindPopup("<h5>" + province_list[n] + "</h5><p>" + caseDict['count'][province_list[n]]['count'] + " cases</p>")
+                    circle.bindPopup("<h5>" + province_list[n] + "</h5><h6>" + thousands_separators(caseDict['count'][province_list[n]]['count']) + " cases</h6>")
             } 
             
             nation.addLayer(group_national)
@@ -504,12 +501,15 @@ function getDead() {
                     dataType : 'json',
                     success  : function (data) {
                       global = data;
-                      $("#TotalConfirmed").append(thousands_separators(global.Global.TotalConfirmed))
-                      $("#TotalDeaths").append(thousands_separators(global.Global.TotalDeaths))
-                      $("#TotalRecovered").append(thousands_separators(global.Global.TotalRecovered))
+                      $("#TotalConfirmed").append(thousands_separators(global.Global.TotalConfirmed));
+                      $("#TotalDeaths").append(thousands_separators(global.Global.TotalDeaths));
+                      $("#TotalRecovered").append(thousands_separators(global.Global.TotalRecovered));
+                      $(".NewConfirmed").append(thousands_separators(global.Global.NewConfirmed)+" New Confirmed");
+                      $(".NewDeaths").append(thousands_separators(global.Global.NewDeaths)+" New Deaths");
+                      $(".NewRecovered").append(thousands_separators(global.Global.NewRecovered)+" New Recovered")
                     }
                 });
-                    },300)
+                    },2000)
            
         }
     }

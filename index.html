@@ -107,18 +107,12 @@
 
 
     <div class="tab container-fluid main tab">
-
-        <div class="row" style="padding-bottom: 20px;">
-
-            <div class='col-sm-9'>
-                <div id="nation_map" class='map'></div>
-            </div>
-            <div class="col-sm-3">
+        <div class="row" style='padding-bottom: 10px;'>
+            <div class="col-sm-2">
                 <div class="card text-white bg-dark total-cases">
-                    <div class="card-header" style="text-align: center;">Total Cases</div>
                     <div class="card-body">
-                        <h1><i class="fas fa-viruses"></i></h1>
-                        <h1 class="card-title totalCases display-4"></h1>
+                        <h6><i class="fas fa-viruses"></i>Total Cases</h6>
+                        <h3 class="card-title totalCases"></h3>
                         <p class="card-text compare_yesterday"></p>
                         <div class="spinner-border text-light spinner-loader" role="status">
                             <span class="sr-only">Loading...</span>
@@ -126,14 +120,79 @@
                     </div>
                 </div>
             </div>
+            <div class='col-sm-10'>
+                <div class="card text-white bg-dark sub-data">
+                    <div class="card-body">
+                        <div class='row'>
+                            <div class='col-sm'>
+                                <h6><i class="fas fa-heart-broken"></i>Total Death</i></h6>
+                                <h3 class="card-title totalDeath"></h3>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="card-text compare_yesterday_death"></p>
+                                <hr>
+                            </div>
+                            
+                            <div class='col-sm'>
+                                <h6><i class="fas fa-procedures"></i>Total Recovered</h6>
+                                <h3 class="card-title totalRecov"></h3>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="card-text compare_yesterday_recov"></p>
+                                <hr>
+                            </div>
+                            <div class='col-sm'>
+                                <h6><i class="fas fa-syringe"></i>Total Tested</h6>
+                                <h3 class="card-title totalTest"></h3>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="card-text compare_yesterday_test"></p>
+                                <hr>
+                            </div>
+                            <div class='col-sm'>
+                                <h6><span class="badge badge-warning ">Global Confirmed</span></h6>
+                                <h3 id="TotalConfirmed"></h3>
+                                <p class="card-text NewConfirmed"></p>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class='col-sm'>
+                                <h6><span class="badge badge-warning ">Global Deaths</span>
+                                </h6>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <h3 id="TotalDeaths"></h3>
+                                <p class="card-text NewDeaths"></p>
+                                <hr>
+                            </div>
+                            <div class='col-sm'>
+                                <h6><span class="badge badge-warning ">Global Recovered</span>
+                                </h6>
+                                <h3 id="TotalRecovered"></h3>
+                                <div class="spinner-border text-light spinner-loader" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="card-text NewRecovered"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
-
-
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="card text-white bg-dark mb-3 main_card line-chart">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-sm">
+                <div id="nation_map" class='map'></div>
+            </div>
+            <div class='col-sm'>
+                <div class="card text-white bg-dark main_card line-chart">
                     <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Reported Case</div>
                     <div class="card-body myChartDiv">
                         <div class="text-center spinner-loader">
@@ -144,105 +203,33 @@
 
                     </div>
                 </div>
-                <div class="card text-white bg-dark mb-3 main_card table-chart">
-                    <div class="card-header"><i class="fas fa-table"></i>Table | Reported Case</div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="prov_data_table" class="table table-dark">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Province</th>
-                                        <th scope="col">Cases</th>
-                                        <th scope="col">New Cases</th>
-                                        <th scope="col">Deaths</th>
-                                        <th scope="col">New Deaths</th>
-                                        <th scope="col">Recovered</th>
-                                        <th scope="col">New Recovered</th>
-                                        <th scope="col">Tested</th>
-                                        <th scope="col">New Tested</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table_body"></tbody>
-                            </table>
-                            <div class="text-center spinner-loader">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <div class="col-sm-3">
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-heart-broken"></i>Total Death</i></div>
-                    <div class="card-body">
-                        <h5 class="card-title totalDeath"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_death"></p>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-procedures"></i>Total Recovered</div>
-                    <div class="card-body">
-                        <h5 class="card-title totalRecov"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
+        </div>
+        <div class="card text-white bg-dark mb-3 main_card table-chart">
+            <div class="card-header"><i class="fas fa-table"></i>Table | Reported Case</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="prov_data_table" class="table table-dark table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Province</th>
+                                <th scope="col">Cases</th>
+                                <th scope="col">New Cases</th>
+                                <th scope="col">Deaths</th>
+                                <th scope="col">New Deaths</th>
+                                <th scope="col">Recovered</th>
+                                <th scope="col">New Recovered</th>
+                                <th scope="col">Tested</th>
+                                <th scope="col">New Tested</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table_body"></tbody>
+                    </table>
+                    <div class="text-center spinner-loader">
+                        <div class="spinner-border" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_recov"></p>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-syringe"></i>Total Tested</div>
-                    <div class="card-body">
-                        <h5 class="card-title totalTest"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <p class="card-text compare_yesterday_test"></p>
-                        <div class="spinner-border  text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-header"><i class="fas fa-globe"></i>Global</div>
-                    <div class="card-body">
-                        <h5 id="TotalConfirmed"><span class="badge badge-warning ">Total Confirmed</span>
-                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                            <br>
-                        </h5>
-                        <hr>
-                        <h5 id="TotalDeaths"><span class="badge badge-warning ">Total Deaths</span>
-                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                            <br>
-                        </h5>
-                        <hr>
-                        <h5 id="TotalRecovered"><span class="badge badge-warning ">Total Recovered</span>
-                            <div class="spinner-border spinner-border-sm text-light spinner-loader" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                            <br>
-                        </h5>
-                        
-                        
                     </div>
                 </div>
             </div>
@@ -309,9 +296,7 @@
                     <div class="card-header">
                         <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Gender Cumulative
                     </div>
-                    <div class="card-body">
-
-                    </div>
+                    <div class="card-body"></div>
                 </div>
             </div>
         </div>
@@ -397,11 +382,8 @@
             </div>
         </div>
         <div>
-
             <div class='map t_map' id="travel_map"></div>
         </div>
-
-
         <div class="card text-white bg-dark mb-3">
             <div class="card-header">
                 Table | Travel History
