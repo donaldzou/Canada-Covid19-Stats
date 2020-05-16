@@ -198,7 +198,7 @@ function load_gender_graph() {
         $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="500"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     else {
-        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="600"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+        $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
     var ctx = document.getElementById("gender_chart");
     gen_chart = new Chart(ctx, {
@@ -213,7 +213,7 @@ function load_gender_graph() {
             }]
         },
         options: {
-            
+            responsive:true,
             scales: {
                 xAxes: [{
                     barPercentage: 0.5,
@@ -411,7 +411,7 @@ function load_region_graph() {
                 $(".region_chart").append('<canvas id="regionChart" width="500" height="700"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             else {
-                $(".region_chart").append('<canvas id="regionChart" width="500" height="300"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+                $(".region_chart").append('<canvas id="regionChart" height="250"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
 
     region_dataset = province_dataset
@@ -423,9 +423,9 @@ function load_region_graph() {
             labels: [],
             datasets: []
         },
-        responsive: true,
+        
         options: {
-            
+            responsive: true,
             scales: {
                 yAxes: [{
                     gridLines: {

@@ -133,7 +133,7 @@
                                 <p class="card-text compare_yesterday_death"></p>
                                 <hr>
                             </div>
-                            
+
                             <div class='col-sm'>
                                 <h6><i class="fas fa-procedures"></i>Total Recovered</h6>
                                 <h3 class="card-title totalRecov"></h3>
@@ -237,11 +237,12 @@
     </div>
 
     <div class="tab container-fluid cases">
-
-        <div class="row">
-            <div class="col-sm-9">
+        <div class="row" style='margin-bottom: 10px;'>
+            <div class="col-sm">
                 <div id="mapid" class="cases_mod map"></div>
-                <div class="card text-white bg-dark mb-3 line-chart">
+            </div>
+            <div class="col-sm">
+                <div class="card text-white bg-dark line-chart">
                     <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Reported Case</div>
                     <div class="card-body region_chart">
                         <div class="text-center spinner-loader">
@@ -252,6 +253,17 @@
 
                     </div>
                 </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class='row' style='margin-bottom: 10px;'>
+            <div class='col-sm'>
                 <div class="card text-white bg-dark mb-3 age-table bar-chart">
                     <div class="card-header">
                         <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Age Cumulative
@@ -265,33 +277,8 @@
 
                     </div>
                 </div>
-
             </div>
-            <div class="col-sm-3">
-                <div class="card text-white bg-dark mb-3 province_total_case">
-                    <div class="card-body">
-                        <h5 class="card-title totalCases"></h5>
-                        <hr>
-                        <h5 class="card-text compare_yesterday"></h5>
-                    </div>
-                </div>
-                <div class="card text-white bg-dark mb-3 region_table table-chart">
-                    <div class="card-header">
-                        <i class="fas fa-times" aria-hidden="true"></i>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-dark table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Health Region</th>
-                                    <th scope="col"># of Case</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class='col-sm'>
                 <div class="card text-white bg-dark mb-3 gender-table bar-chart">
                     <div class="card-header">
                         <i class="far fa-chart-bar"></i>Chart | Canada Reported Cases Gender Cumulative
@@ -300,15 +287,33 @@
                 </div>
             </div>
         </div>
+        <div class="card text-white bg-dark mb-3 region_table table-chart">
+            <div class="card-header">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Health Region</th>
+                            <th scope="col"># of Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
 
     <div class='tab container-fluid death'>
-
         <div class='row'>
-            <div class='col-sm-9'>
+            <div class="col-sm">
                 <div id='death_map' class='map'></div>
+            </div>
+            <div class='col-sm'>
                 <div class='card text-white bg-dark mb-3 death_case line-chart'>
                     <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Mortality Cumulative</div>
                     <div class="card-body">
@@ -317,6 +322,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm'>
                 <div class='card text-white bg-dark mb-3 death_age bar-chart'>
                     <div class="card-header"><i class="far fa-chart-bar"></i>Chart | Mortality Age Cumulative</div>
                     <div class="card-body">
@@ -326,41 +335,7 @@
                     </div>
                 </div>
             </div>
-            <div class='col-sm-3'>
-                <div class="card text-white bg-dark mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title totalDeath"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <hr>
-                        <h5 class="card-text compare_yesterday_death"></h5>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card text-white bg-dark mb-3 line-chart">
-                    <div class='card-header'>
-                        Table | Mortality Cumulative
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-dark death_table table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Province</th>
-                                    <th scope="col">Cumulative Mortality</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                        <div class="spinner-border text-light spinner-loader" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
+            <div class='col-sm'>
                 <div class='card text-white bg-dark mb-3 death_gender bar-chart'>
                     <div class="card-header"><i class="far fa-chart-bar"></i>Chart | Mortality Gender Cumulative</div>
                     <div class="card-body">
@@ -368,6 +343,36 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+        <div class="card text-white bg-dark mb-3 line-chart">
+            <div class='card-header'>
+                Table | Mortality Cumulative
+            </div>
+            <div class="card-body">
+                <table class="table table-dark death_table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Province</th>
+                            <th scope="col">Cumulative Mortality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <div class="spinner-border text-light spinner-loader" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </div>

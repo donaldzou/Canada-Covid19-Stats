@@ -70,7 +70,7 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }
 
 .map{
-    height: 70vh;
+    height: 100%;
     margin-bottom: 20px;
     border-radius: 0.25rem;
     transition: ease-in-out 0.3s;
@@ -232,6 +232,10 @@ h4 .badge{
     display: none;
 }
 
+.cases .card{
+    height: 100%;
+}
+
 
 @media only screen and (max-width: 575px) {
     .total-cases{
@@ -241,4 +245,9 @@ h4 .badge{
     .sub-data hr{
         display: block;
     }
+
+    
 }
+
+
+

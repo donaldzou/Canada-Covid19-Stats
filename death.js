@@ -213,7 +213,7 @@ function death(){
                 $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="500"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             else {
-                $(".death_gender .card-body").append('<canvas id="death_gender_table" width="500" height="600"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
+                $(".death_gender .card-body").append('<canvas id="death_gender_table"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
             var ctx = document.getElementById("death_gender_table");
             death_gender_chart = new Chart(ctx, {
