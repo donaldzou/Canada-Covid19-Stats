@@ -36,8 +36,7 @@
                         class="fas fa-viruses"></i></a>
                 <a class="nav-item nav-link death_link" href="#motality" onclick="death()">Mortality<i
                         class="fas fa-heart-broken"></i></a>
-                <a class="nav-item nav-link recov_link" href="#recovered" data-toggle="modal"
-                    data-target="#staticBackdrop">Recovered<i class="fas fa-procedures"></i></a>
+                <a class="nav-item nav-link recov_link" href="#recovered" onclick="recov()">Recovered<i class="fas fa-procedures"></i></a>
                 <a class="nav-item nav-link test_link" href="#tested" data-toggle="modal"
                     data-target="#staticBackdrop">Tested<i class="fas fa-syringe"></i></i></a>
                 <a class="nav-item nav-link travel_link" href="#travel" onclick="travel()">Travel History<i
@@ -80,10 +79,10 @@
             <div class='col-sm'>
                 <div class='row'>
                     <div class='col-sm'>
-                        <h4 class=""><span class="badge badge-danger totalCases"> Deaths</span></h4>
+                        <h4 class=""><span class="badge badge-danger totalCases"> Cases</span></h4>
                     </div>
                     <div class='col-sm'>
-                        <h4 class=""><span class="badge badge-danger compare_yesterday"> Deaths</span></h4>
+                        <h4 class=""><span class="badge badge-danger compare_yesterday"> New Cases</span></h4>
                     </div>
                 </div>
             </div>
@@ -100,6 +99,14 @@
                             Search</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class='row recov_nav double_nav'>
+            <div class='col-sm'>
+                <h4 class=""><span class="badge badge-danger totalRecov"> Recovered</span></h4>
+            </div>
+            <div class='col-sm'>
+                <h4 class=""><span class="badge badge-danger compare_yesterday_recov"> New Recovered</span></h4>
             </div>
         </div>
 
@@ -127,29 +134,30 @@
                             <div class='col-sm'>
                                 <h6><i class="fas fa-heart-broken"></i>Total Death</i></h6>
                                 <h3 class="card-title totalDeath"></h3>
+                                <p class="card-text compare_yesterday_death"></p>
                                 <div class="spinner-border text-light spinner-loader" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="card-text compare_yesterday_death"></p>
                                 <hr>
                             </div>
 
                             <div class='col-sm'>
                                 <h6><i class="fas fa-procedures"></i>Total Recovered</h6>
                                 <h3 class="card-title totalRecov"></h3>
+                                <p class="card-text compare_yesterday_recov"></p>
                                 <div class="spinner-border text-light spinner-loader" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="card-text compare_yesterday_recov"></p>
                                 <hr>
                             </div>
                             <div class='col-sm'>
                                 <h6><i class="fas fa-syringe"></i>Total Tested</h6>
                                 <h3 class="card-title totalTest"></h3>
+                                
+                                <p class="card-text compare_yesterday_test"></p>
                                 <div class="spinner-border text-light spinner-loader" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="card-text compare_yesterday_test"></p>
                                 <hr>
                             </div>
                             <div class='col-sm'>
@@ -164,21 +172,23 @@
                             <div class='col-sm'>
                                 <h6><span class="badge badge-warning ">Global Deaths</span>
                                 </h6>
+                               
+                                <h3 id="TotalDeaths"></h3>
+                                <p class="card-text NewDeaths"></p>
                                 <div class="spinner-border text-light spinner-loader" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <h3 id="TotalDeaths"></h3>
-                                <p class="card-text NewDeaths"></p>
                                 <hr>
                             </div>
                             <div class='col-sm'>
                                 <h6><span class="badge badge-warning ">Global Recovered</span>
                                 </h6>
                                 <h3 id="TotalRecovered"></h3>
+                                
+                                <p class="card-text NewRecovered"></p>
                                 <div class="spinner-border text-light spinner-loader" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                                <p class="card-text NewRecovered"></p>
                             </div>
                         </div>
                     </div>
@@ -255,13 +265,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
         <div class='row' style='margin-bottom: 10px;'>
             <div class='col-sm'>
                 <div class="card text-white bg-dark mb-3 age-table bar-chart">
@@ -306,15 +309,13 @@
         </div>
     </div>
 
-
-
     <div class='tab container-fluid death'>
-        <div class='row'>
+        <div class='row' style="margin-bottom: 10px;">
             <div class="col-sm">
                 <div id='death_map' class='map'></div>
             </div>
             <div class='col-sm'>
-                <div class='card text-white bg-dark mb-3 death_case line-chart'>
+                <div class='card text-white bg-dark death_case line-chart'>
                     <div class="card-header"><i class="fas fa-chart-line"></i>Chart | Mortality Cumulative</div>
                     <div class="card-body">
                         <div class="spinner-border text-light spinner-loader" role="status">
@@ -347,14 +348,6 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
         <div class="card text-white bg-dark mb-3 line-chart">
             <div class='card-header'>
                 Table | Mortality Cumulative
@@ -377,8 +370,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class='tab container-fluid travel'>
         <div class="text-center spinner-cases">
@@ -414,6 +405,13 @@
             </div>
         </div>
     </div>
+
+    <div class='tab container-fluid recov'>
+        <div id="recov_map" class='map'></div>
+    </div>
+
+
+
 
     <div class='footer'>
         <div class='container-fluid'>
@@ -486,6 +484,7 @@
 <script src="main.js"></script>
 <script src='cases.js'></script>
 <script src='death.js'></script>
+<script src='recov.js'></script>
 <script src='travel.js'></script>
 
 </html>

@@ -15,6 +15,7 @@ var region_chart;
 
 
 function cases() {
+    ScrollTop()
     if ($('.cases_link').hasClass("active") == false) {
         if ($(".cases").hasClass('loaded')) {
             $(".nav-link").removeClass("active");

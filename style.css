@@ -236,6 +236,15 @@ h4 .badge{
     height: 100%;
 }
 
+.death .card{
+    height: 100%;
+}
+
+@media only screen and (max-width: 575px) {
+    .death .col-sm{
+        margin-bottom: 10px;
+    }
+}
 
 @media only screen and (max-width: 575px) {
     .total-cases{

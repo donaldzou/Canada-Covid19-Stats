@@ -19,6 +19,7 @@ function removeData(chart) {
 }
 
 function death(){
+    ScrollTop();
     if($('.death_link').hasClass('active') == false){
         if ($('.death').hasClass('loaded')){
             $(".nav-link").removeClass("active");
