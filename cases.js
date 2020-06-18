@@ -16,18 +16,22 @@ var region_chart;
 
 function cases() {
     ScrollTop()
+    
     if ($('.cases_link').hasClass("active") == false) {
         if ($(".cases").hasClass('loaded')) {
             $(".nav-link").removeClass("active");
             $(".cases_link").addClass("active");
             $(".tab").fadeOut()
             $(".cases").fadeIn()
+            $(".search-bar").fadeIn();
             //
             $(".double_nav").hide();
             $(".cases_nav").fadeIn();
             //
         }
-        else {
+        else { 
+            $(".progress-bar").css("width","30%");
+            $(".progress").fadeIn();
             $(".totalCases").text(total_Case+' Cases')
             $(".cases").addClass("loaded")
             $(".nav-link").removeClass("active");
@@ -83,6 +87,7 @@ function cases() {
 }
 
 function load_age_graph() {
+    $(".progress-bar").css("width","50%");
     if (screen_width <= 768) {
         $(".age-table .card-body").append('<canvas id="prov_chart" class="cases_mod" width="500" height="400"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
@@ -195,6 +200,7 @@ function removeData(chart) {
 }
 
 function load_gender_graph() {
+    $(".-bar").css("width","70%");
     if (screen_width <= 768) {
         $(".gender-table .card-body").append('<canvas id="gender_chart" class="cases_mod" width="500" height="500"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
     }
@@ -300,6 +306,7 @@ function update_gender_graph() {
 var geo;
 var prov;
 function load_map() {
+    $(".progress-bar").css("width","100%");
     var list_data = [];
     if ($("#province-select").val() == 'Canada') {
         var width = $(window).width();
@@ -356,10 +363,34 @@ function load_map() {
                             fillOpacity: 0.3,
                             weight: 1
                         };
+                    },
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(function (layer) {
+                            var str = "<h4>" + layer.feature.properties.NAME + "</h4><h6>" + layer.feature.properties.AMOUNT + " cases</h6>"
+                            return str;
+                        },{className: 'my-popup'});
+                        layer.on('mouseover', function () {
+                            var name = layer.feature.properties.NAME
+                            // layer.openPopup();
+                            for (var n in region_chart.data.datasets){
+                                var num = Object.keys(region_chart.data.datasets[n]._meta)[0]
+                                if (region_chart.data.datasets[n]['label'] != name){
+                                    region_chart.data.datasets[n]._meta[num].hidden = true
+                                }
+                            }
+                            region_chart.update()
+                        });
+                        layer.on('mouseout', function () {
+                            // layer.closePopup();
+                            for (var n in region_chart.data.datasets){
+                                var num = Object.keys(region_chart.data.datasets[n]._meta)[0]
+                                if (region_chart.data.datasets[n]['label'] != name){
+                                    region_chart.data.datasets[n]._meta[num].hidden = null
+                                }
+                            }
+                            region_chart.update()
+                        });
                     }
-                }).bindPopup(function (layer) {
-                    var str = "<h4>" + layer.feature.properties.NAME + "</h4><h6>" + layer.feature.properties.AMOUNT + " cases</h6>"
-                    return str;
                 }).addTo(group_local);
             }
         })
@@ -378,6 +409,7 @@ function load_map() {
     $(".cases_mod").fadeIn();
     $("#mapid").css("opacity", 1)
     mymap.invalidateSize();
+    $(".progress").fadeOut();
     //--------------------------------
 }
 
@@ -408,6 +440,7 @@ function load_table() {
 }
 
 function load_region_graph() {
+    $(".progress-bar").css("width","70%");
  if (screen_width <= 768) {
                 $(".region_chart").append('<canvas id="regionChart" width="500" height="700"></canvas><p class="graph_note" style="text-align: right; font-size:10px"></p>')
             }
@@ -522,6 +555,7 @@ function update_region_graph() {
 }
 
 $('#get_province').click(function () {
+    $(self).addClass("disabled")
     $("#province_title").text($("#province-select").val())
     $(".map .card-header").text('Map | ' + $("#province-select").val() + ' Reported Cases')
     $(".age-table .card-header").html('<i class="far fa-chart-bar"></i>Chart | ' + $("#province-select").val() + ' Reported Cases Age Cumulative')

@@ -26,6 +26,7 @@ function death(){
             $(".death_link").addClass("active");
             $(".tab").fadeOut();
             //
+            $(".search-bar").fadeIn();
             $(".double_nav").hide();
             $(".death_nav").fadeIn();
             //

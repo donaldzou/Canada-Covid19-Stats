@@ -22,7 +22,9 @@
 </head>
 
 <body>
-
+    <div class="progress" style="height: 2px;">
+        <div class="progress-bar" role="progressbar" style="width: 10%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Canada COVID-19 Stats</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -161,32 +163,32 @@
                                 <hr>
                             </div>
                             <div class='col-sm'>
-                                <h6><span class="badge badge-warning ">Global Confirmed</span></h6>
-                                <h3 id="TotalConfirmed"></h3>
+                                <h6 style='margin-bottom: 11px;'><span class="badge badge-warning ">Global Confirmed</span></h6>
+                                <h3 id="TotalConfirmed" class='card-title'></h3>
                                 <p class="card-text NewConfirmed"></p>
-                                <div class="spinner-border text-light spinner-loader" role="status">
+                                <div class="spinner-border text-light spinner-global" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <hr>
                             </div>
                             <div class='col-sm'>
-                                <h6><span class="badge badge-warning ">Global Deaths</span>
+                                <h6 style='margin-bottom: 11px;'><span class="badge badge-warning ">Global Deaths</span>
                                 </h6>
                                
-                                <h3 id="TotalDeaths"></h3>
+                                <h3 id="TotalDeaths" class='card-title'></h3>
                                 <p class="card-text NewDeaths"></p>
-                                <div class="spinner-border text-light spinner-loader" role="status">
+                                <div class="spinner-border text-light spinner-global" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <hr>
                             </div>
                             <div class='col-sm'>
-                                <h6><span class="badge badge-warning ">Global Recovered</span>
+                                <h6 style='margin-bottom: 11px;'><span class="badge badge-warning ">Global Recovered</span>
                                 </h6>
-                                <h3 id="TotalRecovered"></h3>
+                                <h3 id="TotalRecovered" class='card-title'></h3>
                                 
                                 <p class="card-text NewRecovered"></p>
-                                <div class="spinner-border text-light spinner-loader" role="status">
+                                <div class="spinner-border text-light spinner-global" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
@@ -325,7 +327,7 @@
                 </div>
             </div>
         </div>
-        <div class='row'>
+        <div class='row' style='margin-bottom: 10px;'>
             <div class='col-sm'>
                 <div class='card text-white bg-dark mb-3 death_age bar-chart'>
                     <div class="card-header"><i class="far fa-chart-bar"></i>Chart | Mortality Age Cumulative</div>
@@ -407,7 +409,7 @@
     </div>
 
     <div class='tab container-fluid recov'>
-        <div id="recov_map" class='map'></div>
+        <div id="recov_map" class='map t_map'></div>
     </div>
 
 

@@ -1,5 +1,6 @@
 var travel_map
 function travel() {
+    ScrollTop()
     $(".search-bar").fadeOut();
     if ($(".travel").hasClass('loaded')) {
         $(".nav-link").removeClass("active");

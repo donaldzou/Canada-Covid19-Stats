@@ -22,6 +22,7 @@ var main_chart;
 var travel_history = {}
 var graph_data = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
 var global;
+var prov_recov = {}
 prov_geocode = {
     "Ontario": { "lat": 49.919, "lon": -84.737 },
     "BC": { "lat": 54.536, "lon": -126.557 },
@@ -116,6 +117,7 @@ function thousands_separators(num) {
 
 
 function getCases() {
+    $(".progress-bar").css("width","30%")
     status = false
     casedata = $.ajax({
         type: "GET",
@@ -202,7 +204,7 @@ function getCases() {
                     caseDict['count']['Nunavut'] = { 'count': 0, 'cases': [] }
                     full_name.push("Nunavut")
                 }
-
+                
             }
 
             getRecov();
@@ -359,6 +361,7 @@ function getCases() {
 };
 
 function getDead() {
+    $(".progress-bar").css("width","80%")
     status = false
     deathdata = $.ajax({
         type: "GET",
@@ -504,29 +507,35 @@ function getDead() {
                     dataType: 'json',
                     async: true,
                     success: function (data) {
+                        setTimeout(function (){
+                            $(".progress").fadeOut();
+                        },300)
                         global = data;
+                        $(".spinner-global").fadeOut();
                         $("#TotalConfirmed").append(thousands_separators(global.Global.TotalConfirmed));
                         $("#TotalDeaths").append(thousands_separators(global.Global.TotalDeaths));
                         $("#TotalRecovered").append(thousands_separators(global.Global.TotalRecovered));
                         $(".NewConfirmed").append(thousands_separators(global.Global.NewConfirmed) + " New Confirmed");
                         $(".NewDeaths").append(thousands_separators(global.Global.NewDeaths) + " New Deaths");
                         $(".NewRecovered").append(thousands_separators(global.Global.NewRecovered) + " New Recovered")
+                    },
+                    error: function(request, status, error){
+                        console.log(status)
                     }
                 });
-            }, 100)
+            },1000)
+            $(".progress-bar").css("width","100%")
             $(".spinner-loader").fadeOut();
             $(".totalCases").text(thousands_separators(total_Case));
             $(".compare_yesterday").text(thousands_separators(today_Cases) + " New cases")
             $(".today_date").text("Update Time: " + update_time)
-
-
-
         }
     }
     )
 };
 
 function getRecov() {
+    $(".progress-bar").css("width","50%")
     status = false
     recovdata = $.ajax({
         type: "GET",
@@ -547,6 +556,8 @@ function getRecov() {
                     else {
                         recovDict[recov_date]["cases"].push(current)
                     }
+
+                    
                 }
                 recov_today = 0
                 today_key = Object.keys(recovDict)[0]
@@ -555,6 +566,10 @@ function getRecov() {
                 for (var i = 0; i < recovDict[today_key]["cases"].length; i++) {
                     if (recovDict[today_key]["cases"][i]['cumulative_recovered'] != "NA") {
                         recov_today += parseInt(recovDict[today_key]["cases"][i]['cumulative_recovered'])
+                    }
+                    var prov_n = recovDict[today_key]["cases"][i]['province']
+                    if (prov_recov[prov_n] == undefined){
+                        prov_recov[prov_n] = parseInt(recovDict[today_key]["cases"][i]['cumulative_recovered'])
                     }
 
                 }
@@ -574,6 +589,7 @@ function getRecov() {
 };
 
 function getTested() {
+    $(".progress-bar").css("width","70%")
     status = false
     testdata = $.ajax({
         type: "GET",
